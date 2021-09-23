@@ -67,7 +67,7 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 
   get ActualPassangers () : Array<AirPassengers> {
-    if (this.Passengers.length && this.Passengers) {
+    if (this.Passengers && this.Passengers) {
       this.Passengers.forEach(el => {
         this.PassengersList.push(el)//eslint-disable-line
       })

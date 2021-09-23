@@ -1,7 +1,7 @@
 import { GetterTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AirInterface } from './state'
-import { AirCompanyList, AirPassengers, PasDelete } from '../../components/models'
+import { AirCompanyList, AirPassengers, PasDelete, DataWeather, PointWeather } from '../../components/models'
 
 const getters: GetterTree<AirInterface, StateInterface> = {
   getAirList (context) : Array<AirCompanyList> {
@@ -13,6 +13,12 @@ const getters: GetterTree<AirInterface, StateInterface> = {
   getPassengers (context) : Array<AirPassengers> {
     return context.passengers
   },
+  getPointWeather (context) : Array<PointWeather> {
+    return context.pointWeather
+  },
+  getDataWeather (context) : DataWeather {
+    return context.dataWeather
+  },
   getPassengersDeleteId (context) : string | null {
     return context.passengersDeleteId
   },
@@ -21,6 +27,9 @@ const getters: GetterTree<AirInterface, StateInterface> = {
   },
   getOpenClosePopup (context) : boolean {
     return context.openClosePopup
+  },
+  getOpenCloseWeather (context) : boolean {
+    return context.openCloseWeather
   },
   getActualPage (context) : number {
     return context.actualPage
