@@ -1,0 +1,49 @@
+// @import url('./quasar.variables.scss');
+
+.array{
+  position: absolute;
+  bottom: 0px ;
+  width: 100px;
+  left: calc(50% - 50px);
+  height: 30px;
+  background-color: #292929eb;
+  border-top-left-radius: 10px;
+  border-top-right-radius:10px;
+  cursor: pointer;
+  &:hover{
+    opacity: .3;
+    background-color: rgba(255, 255, 255, 0.7);
+    // background-color: $txtWhite;
+    &:before{
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+      transform: rotate(-45deg);
+      transition: background-color .3s ease, transform .3s ease;
+    }
+  }
+  &:before{
+    content:'';
+    width: 10px;
+    height: 10px;
+    left: calc(50% - 5px);
+    transform: rotate(135deg);
+    position: absolute;
+    top: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    // border-left: 1px solid $txtWhite;
+    // border-bottom: 1px solid $txtWhite;
+    transition: background-color .3s ease, transform .3s ease;
+    &:hover{
+      border-left: 1px solid black;
+      border-bottom: 1px solid black;
+    }
+  }
+}
+.but{
+  margin-top: 40px;
+  padding: 10px 30px;
+  border-radius: 10px;
+  font: 700 20px/24px "Comfortaa",sans-serif;
+  z-index: 2;
+}

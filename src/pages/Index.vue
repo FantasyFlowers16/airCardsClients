@@ -1,62 +1,56 @@
 <template>
   <q-page class="row items-center justify-evenly">
     <div class="b-weather" @click="openWether"></div>
+    <div class="b-companies-img" @click="openCompanies"></div>
+     <div class="b-filter-img" @click="openFilter"></div>
     <weather-card></weather-card>
-    <air-companies
-      title="Example component"
+    <airlines-card></airlines-card>
+    <filter-card></filter-card>
+    <air-pass
+      title="Example title"
       active
-    ></air-companies>
+    ></air-pass>
   </q-page>
 </template>
 
 <script lang="ts">
-import AirCompanies from 'src/components/AirCompanies.vue'
+import AirPass from 'src/components/AirPass.vue'
 import WeatherCard from 'src/components/WeatherCard.vue'
+import FilterCard from 'src/components/FilterCard.vue'
+import AirlinesCard from 'src/components/AirlinesCard.vue'
 import { Vue, Options } from 'vue-class-component'
-import { DataWeather, PointWeather } from '../components/models'
+// import {  } from '../components/models'
 
 @Options({
-  components: { AirCompanies, WeatherCard }
+  components: { AirPass, WeatherCard, AirlinesCard, FilterCard }
 })
 export default class PageIndex extends Vue {
-  point:Array<PointWeather> = []
   coords:Array<number> = []
 
-  async mounted () {
-    console.log('DataWeather1', this.DataWeather)
-    this.point = JSON.parse(JSON.stringify(this.PointWeather))//eslint-disable-line
-    this.point.map(el => {
-      if (el.check) {
-        console.log('el', el)
-        this.coords = []
-        this.coords.push(el.lat, el.lon)
-        el.check = true
-      }
-      return el
-    })
-    await this.updateDataWeatherAxios(this.coords)
-    console.log('DataWeather2', this.DataWeather)
-  }
-
-  get PointWeather () : Array<PointWeather> {
-    return this.$store.getters['air/getPointWeather'] as Array<PointWeather> //eslint-disable-line
-  }
-
-  get DataWeather () : DataWeather {
-    return this.$store.getters['air/getDataWeather'] as DataWeather //eslint-disable-line
-  }
-
-  async updateDataWeatherAxios (val: Array<number>) {
-    await this.$store.dispatch('air/updateDataWeatherAxios', val) //eslint-disable-line
-  }
-
   updateOpCloseWeather (val: boolean) {
-    this.$store.dispatch('air/updateOpenCloseWeather',val) //eslint-disable-line
+    this.$store.dispatch('weather/updateOpenCloseWeather',val) //eslint-disable-line
+  }
+
+  updateOpCloseCompanies (val: boolean) {
+    this.$store.dispatch('air/updateOpenCloseCompanies',val) //eslint-disable-line
+  }
+
+  updateOpCloseFilter (val: boolean) {
+    this.$store.dispatch('filter/updateOpenCloseFilter',val) //eslint-disable-line
   }
 
   openWether () {
+    document.body.style.overflow = 'hidden'
     this.updateOpCloseWeather(true)
-    console.log('wetherOpen')
+  }
+
+  openCompanies () {
+    document.body.style.overflow = 'hidden'
+    this.updateOpCloseCompanies(true)
+  }
+
+  openFilter () {
+    this.updateOpCloseFilter(true)
   }
 }
 </script>
@@ -85,6 +79,7 @@ export default class PageIndex extends Vue {
   left: 100%;
   margin-right: 10px;
   z-index: 10;
+  border: 1px solid $imgBActive;
   border-radius: 10px;
   background: $imgActive;
   animation: weather 1.6s ease infinite;
@@ -100,7 +95,37 @@ export default class PageIndex extends Vue {
     background-size: cover;
   }
 }
-
+.b-companies-img{
+  top: 50px;
+  &::before{
+    background-image: url('../assets/icons/company.svg')!important;
+  }
+}
+.b-filter-img, .b-companies-img{
+  position: sticky;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border: 1px solid $imgBFilter;
+  margin-right: 10px;
+  z-index: 10;
+  border-radius: 10px;
+  background: $imgFilter;
+  top: 60px;
+  &::before{
+    content: '';
+    background-image: url('../assets/icons/filter.svg');
+    min-width: 30px;
+    min-height: 30px;
+    padding: 3px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0px;
+    background-size: cover;
+  }
+}
 @keyframes weather {
   0% {
     background-color: $imgActive;

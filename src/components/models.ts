@@ -7,7 +7,7 @@ export interface Meta {
   totalCount: number;
 }
 export interface AirCompanyList {
-  id:number,
+  id:string,
   name:string,
   country:string,
   logo:string,
@@ -134,4 +134,10 @@ export interface PointWeather {
   check:boolean,
   lon:number,
   lat:number
+}
+
+export interface FilteCompanyItem {
+  id: string;
+  name:string,
+  check: boolean;
 }

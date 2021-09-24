@@ -1,3 +1,8 @@
 .q-page{
   display: block;
 }
+.q-page-container{
+  &._scroll{
+    overflow: scroll;
+  }
+}

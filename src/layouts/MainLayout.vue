@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-page-container>
+    <q-page-container :class="{_scroll:OpenCloseWeather}">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -18,6 +18,9 @@ import Loader from '../components/loader.vue'
 export default class MainLayout extends Vue {
   leftDrawerOpen = false;
   loader=true
+  get OpenCloseWeather () : boolean {
+    return this.$store.getters['air/getOpenCloseWeather'] as boolean //eslint-disable-line
+  }
 
   async updatePassengersAxios (val: number) {
     await this.$store.dispatch('air/updatePassengersAxios', val) //eslint-disable-line

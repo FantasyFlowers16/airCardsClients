@@ -1,38 +1,38 @@
 <template>
   <div  class="b-weather-backdrop"  :class="{_open:OpenCloseWeather}">
     <div  class="b-weather-card">
-      <div class="b-weather-card__title-container" >
+      <div class="b-weather-card__title-container title" >
         <div :key="item.id" v-for="item in PointWeather">
-          <div class="b-weather-card__title" @click="checkPoint(item.id)" :class="{_active:item.check}"> {{item.title}}</div>
+          <div class="b-weather-card__title title" @click="checkPoint(item.id)" :class="{_active:item.check}"> {{item.title}}</div>
         </div>
       </div>
       <div class="b-weather-card__data-container" v-if="DataWeather.timezone">
         <div class="b-weather-card__first-block">
-          <div class="b-weather-card__title">{{DateNow}}</div>
+          <div class="title b-weather-card__title">{{DateNow}}</div>
           <q-img :src="CurrentImg" class="b-weather-card__img"></q-img>
           <!-- <div class="b-weather-card__title"> {{DataWeather.current.weather[0].description}}</div> -->
-          <div class="b-weather-card__title"> {{DataWeather.current.temp}} ℃</div>
-          <div class="b-weather-card__title"> Ветер {{DataWeather.current.wind_speed}} м/с</div>
+          <div class="title b-weather-card__title"> {{Math.round(DataWeather.current.temp)}} &#176;С</div>
+          <div class="title b-weather-card__title"> Ветер {{Math.round(DataWeather.current.wind_speed)}} м/с</div>
         </div>
         <div class="b-weather-card__second-block">
-          <div class="b-weather-card__title">Завтра</div>
+          <div class="title b-weather-card__title">Завтра</div>
             <q-img :src="CurrentImg" class="b-weather-card__img"></q-img>
             <!-- <div class="b-weather-card__title"> {{DataWeather.daily[1].weather[0].description}}</div> -->
-            <div class="b-weather-card__title"> {{DataWeather.daily[1].temp.min}} ℃  - {{DataWeather.daily[1].temp.max}}</div>
-            <div class="b-weather-card__title"> Ветер {{DataWeather.daily[1].wind_speed}} м/с</div>
+            <div class="title b-weather-card__title"> от {{Math.round(DataWeather.daily[1].temp.min)}} &#176;С   до {{Math.round(DataWeather.daily[1].temp.max)}} &#176;С</div>
+            <div class="title b-weather-card__title"> Ветер {{Math.round(DataWeather.daily[1].wind_speed)}} м/с</div>
             <!-- <div class="b-weather-card__title"> {{DataWeather.timezone}}</div> -->
           </div>
           <div class="b-weather-card__third-block">
-          <div class="b-weather-card__title">Послезавтра</div>
+          <div class="title b-weather-card__title">Послезавтра</div>
             <q-img :src="CurrentImg" class="b-weather-card__img"></q-img>
             <!-- <div class="b-weather-card__title"> {{DataWeather.daily[1].weather[0].description}}</div> -->
-            <div class="b-weather-card__title"> {{DataWeather.daily[2].temp.min}} ℃  - {{DataWeather.daily[2].temp.max}}</div>
-            <div class="b-weather-card__title"> Ветер {{DataWeather.daily[2].wind_speed}} м/с</div>
+            <div class="title b-weather-card__title"> от {{Math.round(DataWeather.daily[2].temp.min)}} &#176;С  до {{Math.round(DataWeather.daily[2].temp.max)}} &#176;С</div>
+            <div class="title b-weather-card__title"> Ветер {{Math.round(DataWeather.daily[2].wind_speed)}} м/с</div>
             <!-- <div class="b-weather-card__title"> {{DataWeather.timezone}}</div> -->
           </div>
          <loader v-if="loader" class="b-weather-card__loader"></loader>
-         <div class="b-weather-card__data-container-array" @click="closeWeather"></div>
       </div>
+      <div class="array" @click="closeWeather"></div>
 
   </div>
  </div>
@@ -56,15 +56,15 @@ export default class WeatherCard extends Vue.with(Props) {
   coords: Array<number> = []
 
   get DataWeather () : DataWeather {
-    return this.$store.getters['air/getDataWeather'] as DataWeather //eslint-disable-line
+    return this.$store.getters['weather/getDataWeather'] as DataWeather //eslint-disable-line
   }
 
   get PointWeather () : Array<PointWeather> {
-    return this.$store.getters['air/getPointWeather'] as Array<PointWeather> //eslint-disable-line
+    return this.$store.getters['weather/getPointWeather'] as Array<PointWeather> //eslint-disable-line
   }
 
   get OpenCloseWeather () : boolean {
-    return this.$store.getters['air/getOpenCloseWeather'] as boolean //eslint-disable-line
+    return this.$store.getters['weather/getOpenCloseWeather'] as boolean //eslint-disable-line
   }
 
   get DateNow () {
@@ -84,23 +84,36 @@ export default class WeatherCard extends Vue.with(Props) {
   // }
 
   updatePointWeather (val: Array<PointWeather>) {
-    this.$store.dispatch('air/updatePointWeather',val) //eslint-disable-line
+    this.$store.dispatch('weather/updatePointWeather',val) //eslint-disable-line
   }
 
   updateOpCloseWeather (val: boolean) {
-    this.$store.dispatch('air/updateOpenCloseWeather',val) //eslint-disable-line
+    this.$store.dispatch('weather/updateOpenCloseWeather',val) //eslint-disable-line
   }
 
   async updateDataWeatherAxios (val: Array<number>) {
-    await this.$store.dispatch('air/updateDataWeatherAxios', val) //eslint-disable-line
+    await this.$store.dispatch('weather/updateDataWeatherAxios', val) //eslint-disable-line
   }
 
-  mounted () {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  async mounted () {
+    this.point = JSON.parse(JSON.stringify(this.PointWeather))//eslint-disable-line
+    this.loader = true
+    this.point.forEach(el => {
+      console.log('forEach3')
+      if (el.check) {
+        console.log('el', el)
+        this.coords = []
+        this.coords.push(el.lat, el.lon)
+        el.check = true
+      }
+    })
+    await this.updateDataWeatherAxios(this.coords)
+    this.loader = false
   }
 
   closeWeather () {
     this.updateOpCloseWeather(false)
+    document.body.style.overflow = 'auto'
   }
 
   async updateDataWether () {
@@ -114,7 +127,7 @@ export default class WeatherCard extends Vue.with(Props) {
     console.log(id)
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     this.point = JSON.parse(JSON.stringify(this.PointWeather))
-    this.point.map(el => {
+    this.point.forEach(el => {
       el.check = false
       if (el.id === id) {
         this.coords = []
@@ -122,8 +135,15 @@ export default class WeatherCard extends Vue.with(Props) {
         this.coords.push(el.lat, el.lon)
         el.check = true
       }
-      return el
     })
+    //   this.PointWeather.map(el => {
+    // const nextEl = {
+    //   check: false,
+    //   lat2: el.lat,
+    //   lon2: el.lon
+    // }
+
+    // return nextEl
     this.updatePointWeather(this.point)
     this.updateDataWether()//eslint-disable-line
   }
@@ -223,41 +243,6 @@ export default class WeatherCard extends Vue.with(Props) {
     border-radius: 20px;
     background-color: #292929eb;
   }
-  &__data-container-array{
-    position: absolute;
-    bottom: -30px ;
-    width: 100px;
-    left: calc(50% - 50px);
-    height: 30px;
-    background-color: #292929eb;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius:10px;
-    cursor: pointer;
-    transition: background .3s ease;
-    &:hover{
-      opacity: .3;
-      background-color: $txtWhite;
-      &:before{
-        border-left: 1px solid black;
-        border-bottom: 1px solid black;
-      }
-    }
-    &:before{
-      content:'';
-      width: 10px;
-      height: 10px;
-      left: calc(50% - 5px);
-      transform: rotate(-45deg);
-      position: absolute;
-      top: 8px;
-      border-left: 1px solid $txtWhite;
-      border-bottom: 1px solid $txtWhite;
-      &:hover{
-        border-left: 1px solid black;
-        border-bottom: 1px solid black;
-      }
-    }
-  }
   &__title-container{
     display: flex;
     align-items: center;
@@ -270,9 +255,8 @@ export default class WeatherCard extends Vue.with(Props) {
     padding: 20px;
     cursor: pointer;
     color: $txtWhite;
-    border-radius: 10% ;
+    border-radius: 10px;
     transition: background-color .3s ease, color .3s ease;
-    font: 700 28px/28px "Comfortaa",sans-serif;
     &:hover{
        background-color: rgba(255, 255, 255, 0.5);
       color: black;
