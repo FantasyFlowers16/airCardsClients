@@ -2,7 +2,7 @@
   <div>
     <div class="b-companies__pages">{{ActualPage}} {{titlePage}}</div>
     <div class="b-companies" id="companies-container">
-      <div v-for="item in ActualPassangers" :key="item._id"  class="b-companies__item" @click="openItem(item)">
+      <div v-for="item in FilteredActualPassangers" :key="item._id"  class="b-companies__item" @click="openItem(item)">
         <air-company :data = "item" />
         <div class="b-companies__item-bg"></div>
       </div>
@@ -24,7 +24,7 @@ import AirCompany from './AirCompany.vue'
 import AirPassCard from './AirPassCard.vue'
 import Loader from './loader.vue'
 import PopupCard from './Popap.vue'
-import { AirCompanyList, AirPassengers, FilteCompanyItem } from './models'
+import { AirCompanyList, AirPassengers, FilterPoint } from './models'
 
 class Props {
   readonly title!: string;
@@ -67,21 +67,32 @@ export default class AirCompanies extends Vue.with(Props) {
     return this.$store.getters['air/getOpenClosePopup'] as boolean  //eslint-disable-line
   }
 
-  get ActualFilter () : Array<FilteCompanyItem> {
-    const Filter:Array<FilteCompanyItem> = []
-    this.ActualPassangers.forEach(el => {
-      if (this.CompanyNames.indexOf(el.airline[0].name) === -1) {
-        this.CompanyNames.push(el.airline[0].name)
-        const filterEl = {
-          check: false,
-          name: el.airline[0].name,
-          id: el.airline[0].id
+  get FilteredPoint () : FilterPoint {
+    return this.$store.getters['filter/getFilteredPoint'] as FilterPoint//eslint-disable-line
+  }
+
+  get FilteredActualPassangers () : Array<AirPassengers> {
+    this.loader = true
+    let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.ActualPassangers))//eslint-disable-line
+    console.log('FilteredPoint:1', this.FilteredPoint)
+    // console.log('FilteredPoint', this.FilteredPoint)
+    if (this.FilteredPoint.company !== '') {
+      console.log('mi tut')
+      const NewAirPas: Array<AirPassengers> = []
+      ActualPas.forEach(el => {
+        if (el.airline[0].name === this.FilteredPoint.company) {
+          NewAirPas.push(el)
         }
-        Filter.push(filterEl)
-      }
-    })
-    this.updateFilteCompanyItem(Filter)
-    return Filter
+      })
+      ActualPas = NewAirPas
+      this.loader = false
+      return ActualPas
+    } else {
+      this.loader = false
+      return ActualPas
+    }
+    // console.log('ActualPas2', ActualPas)
+    // return ActualPas
   }
 
   get ActualPassangers () : Array<AirPassengers> {
@@ -89,10 +100,13 @@ export default class AirCompanies extends Vue.with(Props) {
       this.Passengers.forEach(el => {
         this.PassengersList.push(el)//eslint-disable-line
       })
-      // this.updatePassengersActual(this.PassengersList)
+      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+      this.updatePassengersActual(actualPas)
     }
     if (this.PassengersDeleteId) {
       this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
+      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+      this.updatePassengersActual(actualPas)
       this.updatePassengersDeleteId(null)
     }
     return this.PassengersList//eslint-disable-line
@@ -136,10 +150,6 @@ export default class AirCompanies extends Vue.with(Props) {
 
   async updatePassengersAxios (val: number) {
     await this.$store.dispatch('air/updatePassengersAxios', val) //eslint-disable-line
-  }
-
-  updateFilteCompanyItem (val: Array<FilteCompanyItem>) {
-    this.$store.dispatch('filter/updateFilteCompanyItem',val) //eslint-disable-line
   }
 
   updatePassengersDeleteId (val: string|null) {
@@ -214,7 +224,7 @@ export default class AirCompanies extends Vue.with(Props) {
     height: 60px;
     z-index: 9;
     background-color: rgba(167, 164, 164, 0.8);
-    top: 00px;
+    top: 140px;
     border-radius: 10px;
     border: 1px solid gray;
     left: calc(50% - 180px);

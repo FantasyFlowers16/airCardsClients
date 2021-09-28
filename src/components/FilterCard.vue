@@ -4,7 +4,7 @@
     <div class="b-filter__select-title" @click="openListCompanies">{{titleSelectCompany}}</div>
     <div class="b-filter__select-container" :class="{_open:openSelectCompany}">
       <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
-        <div @click="checkCompany(item.name)">{{item.name}}</div>
+        <div @click="checkCompany(item.name)" class="b-filter__select-item-link">{{item.name}}</div>
       </div>
     </div>
 
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirPassengers, FilteCompanyItem } from '../components/models'
+import { AirPassengers, FilteCompanyItem, FilterPoint } from '../components/models'
 import Loader from './loader.vue'
 
 class Props {
@@ -39,18 +39,59 @@ export default class CompanyCard extends Vue.with(Props) {
     return this.$store.getters['filter/getFilteCompanyItem'] as Array<FilteCompanyItem>  //eslint-disable-line
   }
 
+  get FilteredPoint () : FilterPoint {
+    return this.$store.getters['filter/getFilteredPoint'] as FilterPoint//eslint-disable-line
+  }
+
+  get AirPassengersActual () : Array<AirPassengers> {
+    return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
+  }
+
+  get ActualFilter () : Array<FilteCompanyItem> {
+    const Filter:Array<FilteCompanyItem> = []
+    const CompanyNames:Array<string> = []
+    console.log('AirPassengersActual', this.AirPassengersActual)
+    this.AirPassengersActual.forEach(el => {
+      if (CompanyNames.indexOf(el.airline[0].name) === -1) {
+        CompanyNames.push(el.airline[0].name)
+        const filterEl = {
+          check: false,
+          name: el.airline[0].name,
+          id: el.airline[0].id
+        }
+        Filter.push(filterEl)
+      }
+    })
+    this.updateFilteCompanyItem(Filter)
+    return Filter
+  }
+
   updateOpCloseFilter (val: boolean) {
     this.$store.dispatch('filter/updateOpenCloseFilter',val) //eslint-disable-line
   }
 
+  updateFilteCompanyItem (val: Array<FilteCompanyItem>) {
+    this.$store.dispatch('filter/updateFilteCompanyItem',val) //eslint-disable-line
+  }
+
+  updateFilteredPoint (val: FilterPoint) {
+    this.$store.dispatch('filter/updateFilteredPoint',val) //eslint-disable-line
+  }
+
   openListCompanies () {
     this.openSelectCompany = !this.openSelectCompany
+    console.log('ActualFilter', this.ActualFilter)
     console.log('openListCompanies')
   }
 
   checkCompany (name:string) {
     this.titleSelectCompany = name
     this.openSelectCompany = false
+    const FilterPoint = {
+      company: this.titleSelectCompany,
+      namePas: this.FilteredPoint.namePas
+    }
+    this.updateFilteredPoint(FilterPoint)
   }
 
   closeFilter () {
@@ -92,6 +133,9 @@ export default class CompanyCard extends Vue.with(Props) {
     font: 700 28px/28px "Comfortaa",sans-serif;
     color: $txtWhite;
   }
+  &__select-item-link{
+    padding: 15px;
+  }
   &__select-container{
     max-height: 0;
     max-width: 350px;
@@ -120,7 +164,6 @@ export default class CompanyCard extends Vue.with(Props) {
   }
   &__select-item{
     cursor: pointer;
-    padding: 15px;
     width: 100%;
     font: 400 15px/22px "Comfortaa",sans-serif;
     background-color: $bgMain;

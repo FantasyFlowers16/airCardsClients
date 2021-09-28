@@ -1,15 +1,17 @@
 <template>
   <q-page class="row items-center justify-evenly">
-    <div class="b-weather" @click="openWether"></div>
-    <div class="b-companies-img" @click="openCompanies"></div>
-     <div class="b-filter-img" @click="openFilter"></div>
-    <weather-card></weather-card>
-    <airlines-card></airlines-card>
-    <filter-card></filter-card>
+    <div class="b-widget-container">
+      <div class="b-widget__item b-widget__item--weather" @click="openWether"></div>
+      <div class="b-widget__item b-widget__item--companies"  @click="openCompanies"></div>
+      <div class="b-widget__item b-widget__item--filter" @click="openFilter"></div>
+    </div>
     <air-pass
       title="Example title"
       active
     ></air-pass>
+    <weather-card></weather-card>
+    <filter-card></filter-card>
+    <airlines-card></airlines-card>
   </q-page>
 </template>
 
@@ -40,6 +42,7 @@ export default class PageIndex extends Vue {
   }
 
   openWether () {
+    console.log('openWeather')
     document.body.style.overflow = 'hidden'
     this.updateOpCloseWeather(true)
   }
@@ -71,38 +74,118 @@ export default class PageIndex extends Vue {
     margin-left: 0%;
   }
 }
-.b-weather{
-  position: sticky;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  left: 100%;
-  margin-right: 10px;
-  z-index: 10;
-  border: 1px solid $imgBActive;
-  border-radius: 10px;
-  background: $imgActive;
-  animation: weather 1.6s ease infinite;
-  top: 60px;
-  &::before{
-    content: '';
-    background-image: url('../assets/icons/hot.svg');
-    width: 30px;
-    height: 30px;
-    position: absolute;
-    top: 9px;
-    left: 13px;
-    background-size: cover;
-  }
-}
+
 .b-companies-img{
   top: 50px;
   &::before{
     background-image: url('../assets/icons/company.svg')!important;
   }
 }
+.b-widget{
+  &-container{
+    width: 100%;
+    height: 50%;
+    top:0;
+    z-index: 10;
+    position: sticky;
+    display: flex;
+    margin-bottom: 20px;
+  }
+  &__item{
+    position: relative;
+    width: calc(33.3% - 9px);
+    margin-left: 6px;
+    height: 130px;
+    cursor: pointer;
+    z-index: 10;
+    border-radius: 10px;
+    &::before{
+      content: '';
+      background-image: url('../assets/icons/hot.svg');
+      width: 30px;
+      height: 30px;
+      position: absolute;
+      top: calc(50% - 15px);
+      left: calc(50% - 15px);
+      background-size: cover;
+    }
+    &--weather{
+      border: 1px solid $brdGreen;
+      border-radius: 10px;
+      background: $bgGreen;
+      opacity: 0.9;
+      transition: opacity .3s ease;
+      // animation: weather 1.6s ease infinite;
+      &::before{
+        content: '';
+        background-image: url('../assets/icons/hot.svg');
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        background-size: cover;
+      }
+      &:hover{
+        opacity: 1;
+      }
+    }
+    &--filter{
+      border: 1px solid $brdBlue;
+      background: $bgBlue;
+      opacity: 0.9;
+      transition: opacity .3s ease;
+      &::before{
+        content: '';
+        width: 40px;
+        height: 40px;
+        background-image: url('../assets/icons/filter.svg');
+      }
+      &:hover{
+        opacity: 1;
+      }
+    }
+    &--companies{
+      border: 1px solid $brdYellow;
+      background: $bgYellow;
+      transition: opacity .3s ease;
+      opacity: 0.9;
+      &::before{
+        content: '';
+        width: 40px;
+        height: 40px;
+        background-image: url('../assets/icons/company.svg')!important;
+      }
+      &:hover{
+        opacity: 1;
+      }
+    }
+  }
+}
+// .b-weather{
+//   position: relative;
+//   width: 50px;
+//   height: 50px;
+//   cursor: pointer;
+//   left: 100%;
+//   margin-right: 10px;
+//   z-index: 10;
+//   border: 1px solid $imgBActive;
+//   border-radius: 10px;
+//   background: $imgActive;
+//   animation: weather 1.6s ease infinite;
+//   top: 60px;
+//   &::before{
+//     content: '';
+//     background-image: url('../assets/icons/hot.svg');
+//     width: 30px;
+//     height: 30px;
+//     position: absolute;
+//     top: 9px;
+//     left: 13px;
+//     background-size: cover;
+//   }
+// }
 .b-filter-img, .b-companies-img{
-  position: sticky;
+  position: relative;
   width: 50px;
   height: 50px;
   cursor: pointer;

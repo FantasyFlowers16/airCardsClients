@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex'
 import { FilterInterface } from './state'
-import { FilteCompanyItem } from '../../components/models'
+import { FilteCompanyItem, FilterPoint } from '../../components/models'
 
 const mutation: MutationTree<FilterInterface> = {
 
@@ -10,6 +10,9 @@ const mutation: MutationTree<FilterInterface> = {
 
   changeFilteCompanyItem (state: FilterInterface, payload: Array<FilteCompanyItem>):void {
     state.filterCompanies = payload
+  },
+  changeFilteredPoint (state: FilterInterface, payload: FilterPoint):void {
+    state.filteredPoint = payload
   }
 }
 

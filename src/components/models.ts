@@ -141,3 +141,8 @@ export interface FilteCompanyItem {
   name:string,
   check: boolean;
 }
+
+export interface FilterPoint {
+  company: string;
+  namePas:string
+}

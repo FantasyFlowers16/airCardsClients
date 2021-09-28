@@ -13,15 +13,23 @@
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 $bgMain :#b5d1ee;
 $bgWhite :#8f8f8f88;
-$imgActive: rgb(252, 193, 193);
-$imgBActive: rgb(250, 123, 123);
+$imgActive: rgb(248, 215, 215);
+$imgBActive: rgb(250, 191, 191);
 $imgFilter: rgb(193, 252, 208);
 $imgBFilter: rgb(139, 243, 165);
-$imgNotActive: rgb(216, 216, 216);
+$imgNotActive: rgb(253, 228, 228);
 $hBgMain :#84b3e6;
-$txtWhite: rgba(255, 255, 255, 0.7);
+$txtWhite: rgba(255, 255, 255, 1);
 $txtBlack: rgba(0, 0, 0, 0.7);
-$txtDark: rgba(51, 51, 51, 0.9);
+$txtDark: rgba(19, 16, 16, 0.7);
+
+$bgGreen: rgb(215, 248, 217);
+$bgBlue: rgb(220, 239, 255);
+$bgYellow: rgb(245, 248, 215);
+
+$brdGreen: rgb(188, 247, 192);
+$brdBlue: rgb(176, 216, 248);
+$brdYellow: rgb(237, 245, 156);
 
 $primary   : #1976D2;
 $secondary : #26A69A;

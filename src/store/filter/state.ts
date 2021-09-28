@@ -1,14 +1,19 @@
-import { FilteCompanyItem } from '../../components/models'
+import { FilteCompanyItem, FilterPoint } from '../../components/models'
 
 export interface FilterInterface {
   openCloseFilter:boolean,
-  filterCompanies:Array<FilteCompanyItem>
+  filterCompanies:Array<FilteCompanyItem>,
+  filteredPoint:FilterPoint
 }
 
 function state (): FilterInterface {
   return {
     openCloseFilter: false,
-    filterCompanies: []
+    filterCompanies: [],
+    filteredPoint: {
+      company: '',
+      namePas: ''
+    }
   }
 }
 
