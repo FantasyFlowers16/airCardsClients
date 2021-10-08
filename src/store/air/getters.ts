@@ -13,6 +13,9 @@ const getters: GetterTree<AirInterface, StateInterface> = {
   getPassengers (context) : Array<AirPassengers> {
     return context.passengers
   },
+  getChangeName (context) : boolean {
+    return context.succsessChangeName
+  },
   getPassengersDeleteId (context) : string | null {
     return context.passengersDeleteId
   },

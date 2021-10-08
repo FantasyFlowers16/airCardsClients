@@ -74,7 +74,6 @@ export default class AirCompanies extends Vue.with(Props) {
   get FilteredActualPassangers () : Array<AirPassengers> {
     this.loader = true
     let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.ActualPassangers))//eslint-disable-line
-    console.log('FilteredPoint:1', this.FilteredPoint)
     // console.log('FilteredPoint', this.FilteredPoint)
     if (this.FilteredPoint.company !== '') {
       console.log('mi tut')
@@ -96,7 +95,7 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 
   get ActualPassangers () : Array<AirPassengers> {
-    if (this.Passengers && this.Passengers) {
+    if (this.Passengers) {
       this.Passengers.forEach(el => {
         this.PassengersList.push(el)//eslint-disable-line
       })

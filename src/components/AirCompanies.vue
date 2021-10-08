@@ -14,8 +14,7 @@
     <transition name="showCard">
       <popup-card v-if="OpenClosePopup"></popup-card>
     </transition>
-
-</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -67,16 +66,16 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 
   get ActualPassangers () : Array<AirPassengers> {
-    if (this.Passengers && this.Passengers) {
+    if (this.Passengers) {
       this.Passengers.forEach(el => {
         this.PassengersList.push(el)//eslint-disable-line
       })
       // this.updatePassengersActual(this.PassengersList)
     }
-    if (this.PassengersDeleteId) {
-      this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
-      this.updatePassengersDeleteId(null)
-    }
+    // if (this.PassengersDeleteId) {
+    //   this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
+    //   this.updatePassengersDeleteId(null)
+    // }
     return this.PassengersList//eslint-disable-line
   }
 

@@ -1,13 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
   <div class="b-company-card-backdrop">
     <div class="b-company-card">
       <div class="b-company-card__item">
           <q-img class="b-company-card__img" :src="data.airline[0].logo"></q-img>
           <div class="b-company-card__data-container">
-            <div class="b-company-card__info-block">
+            <div class="b-company-card__info-block" >
               <div class="b-company-card__title">Имя пассажира: </div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.name}}</div>
+              <div class="b-company-card__text"  :class="{_load:loader}">{{data.name}}</div>
+              <div class="b-company-card__redact-name" v-if="!redactForm" @click="redactName"></div>
+              <div class="b-company-card__succsess-name" v-if="ChangeName" @click="redactName"></div>
             </div>
+            <div class="b-company__info-block" v-if="redactForm && !ChangeName">
+              <q-input class="b-company-card__input input" color="black" v-model="name" />
+              <q-btn class="but b-company-card__but " @click="changePasName">Изменить</q-btn>
+             </div>
             <div class="b-company__info-block">
               <div class="b-company-card__title">Название компании: </div>
               <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].name}}</div>
@@ -42,7 +50,7 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirPassengers } from '../components/models'
+import { AirPassengers, NameChange } from '../components/models'
 import Loader from './loader.vue'
 
 class Props {
@@ -56,9 +64,15 @@ class Props {
 export default class CompanyCard extends Vue.with(Props) {
   clickCount = 0;
   loader = true
+  name = ''
+  redactForm = false
 
   get Passengers () : Array<AirPassengers> {
     return this.$store.getters['air/getPassengers'] as Array<AirPassengers>  //eslint-disable-line
+  }
+
+  get ChangeName () : boolean {
+    return this.$store.getters['air/getChangeName'] as boolean //eslint-disable-line
   }
 
   updateOpClosenCard (val: boolean) {
@@ -77,8 +91,24 @@ export default class CompanyCard extends Vue.with(Props) {
     this.$store.dispatch('air/updatePassengersDeleteId',val) //eslint-disable-line
   }
 
+  updatePassengerName (val: NameChange) {
+    this.$store.dispatch('air/updatePassengerName',val) //eslint-disable-line
+  }
+
+  updateChangeName (val: boolean) {
+    this.$store.dispatch('air/updateChangeName',val) //eslint-disable-line
+  }
+
+  updatePassengersAxios (val: number) {
+    this.$store.dispatch('air/updatePassengersAxios', val) //eslint-disable-line
+  }
+
   async deletePassengersAxios (val: string) {
     await this.$store.dispatch('air/deletePassengersAxios',val) //eslint-disable-line
+  }
+
+  updatePassengerNameAxios (val: NameChange) {
+    this.$store.dispatch('air/updatePassengerNameAxios',val) //eslint-disable-line
   }
 
   mounted () {
@@ -86,6 +116,10 @@ export default class CompanyCard extends Vue.with(Props) {
     setTimeout(() => {
       this.loader = false
     }, 1100)
+  }
+
+  redactName () {
+    this.redactForm = true
   }
 
   async deletePas () {
@@ -98,8 +132,27 @@ export default class CompanyCard extends Vue.with(Props) {
     // this.updatePassengers(this.Passengers.filter(el => el._id !== this.data._id))
   }
 
+  changePasName () {
+    console.log('id', this.data.airline[0].id)
+    this.updatePassengerNameAxios({ id: this.data._id, name: this.name })
+    let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.Passengers))//eslint-disable-line
+    if (Passengers) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      Passengers.forEach((el:AirPassengers) => {
+        if (el._id === this.data._id) {
+          el.name = this.name
+        }
+      })
+      this.updatePassengers(Passengers)
+      console.log(this.Passengers)
+    }
+
+    // this.updatePassengersAxios(1)
+  }
+
   closeCard () {
     this.updateOpClosenCard(false)
+    this.updateChangeName(false)
   }
 }
 </script>
@@ -126,6 +179,29 @@ export default class CompanyCard extends Vue.with(Props) {
   position: relative;
   // overflow-y: auto;
   // overflow-x: hidden;
+  &__input{
+  }
+  &__but{
+    margin: 0 20px
+  }
+  &__redact-name{
+    width: 30px;
+    height: 30px;
+    background:url('assets/icons/edit.svg');
+    z-index: 10000;
+    z-index: 10000;
+    background-size: cover;
+    margin-left: 24px;
+  }
+  &__succsess-name{
+    width: 25px;
+    height: 30px;
+    background:url('assets/icons/succsess.svg');
+    z-index: 10000;
+    z-index: 10000;
+    background-size: cover;
+    margin-left: 24px;
+  }
   &__item{
     position: relative;
     z-index: 2;
@@ -155,6 +231,7 @@ export default class CompanyCard extends Vue.with(Props) {
   &__info-block{
     display: flex;
     padding: 16px 0;
+    position: relative;
   }
   &__title{
     margin: 5px 0;

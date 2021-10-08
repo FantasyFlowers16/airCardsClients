@@ -3,7 +3,7 @@ import { FilteCompanyItem, FilterPoint } from '../../components/models'
 export interface FilterInterface {
   openCloseFilter:boolean,
   filterCompanies:Array<FilteCompanyItem>,
-  filteredPoint:FilterPoint
+  filteredPoint:FilterPoint,
 }
 
 function state (): FilterInterface {
@@ -12,7 +12,8 @@ function state (): FilterInterface {
     filterCompanies: [],
     filteredPoint: {
       company: '',
-      namePas: ''
+      namePas: '',
+      country: ''
     }
   }
 }

@@ -40,8 +40,14 @@
     }
   }
 }
+.input{
+  .q-field__native{
+    box-shadow: none;
+    font: 400 24px/24px "Comfortaa",sans-serif;
+  }
+}
 .but{
-  margin-top: 40px;
+  // margin-top: 40px;
   padding: 10px 30px;
   border-radius: 10px;
   font: 700 20px/24px "Comfortaa",sans-serif;

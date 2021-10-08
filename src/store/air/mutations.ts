@@ -1,6 +1,6 @@
 import { MutationTree } from 'vuex'
 import { AirInterface } from './state'
-import { AirCompanyList, AirPassengers, PasDelete } from '../../components/models'
+import { AirCompanyList, AirPassengers, PasDelete, NameChange } from '../../components/models'
 
 const mutation: MutationTree<AirInterface> = {
   changeAirList (state: AirInterface, payload: Array<AirCompanyList>):void {
@@ -8,6 +8,12 @@ const mutation: MutationTree<AirInterface> = {
   },
   changePassengers (state: AirInterface, payload: Array<AirPassengers>):void {
     state.passengers = payload
+  },
+  changePassengerName (state: AirInterface, payload: NameChange):void {
+    state.updatingName = payload
+  },
+  changesuccsesseName  (state: AirInterface, payload: boolean):void {
+    state.succsessChangeName = payload
   },
   changePassengersActual (state: AirInterface, payload: Array<AirPassengers>):void {
     state.passengersActual = payload

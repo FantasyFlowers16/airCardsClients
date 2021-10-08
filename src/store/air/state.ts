@@ -1,4 +1,4 @@
-import { AirCompanyList, AirPassengers, PasDelete } from '../../components/models'
+import { AirCompanyList, AirPassengers, PasDelete, NameChange } from '../../components/models'
 
 export interface AirInterface {
   airConpanyList: Array<AirCompanyList>;
@@ -10,6 +10,8 @@ export interface AirInterface {
   passengersActual: Array<AirPassengers>,
   passengersDeleteId:string | null,
   deleteData: PasDelete,
+  updatingName:NameChange,
+  succsessChangeName: boolean
 }
 
 function state (): AirInterface {
@@ -33,6 +35,11 @@ function state (): AirInterface {
     openCloseCompanies: false,
     openClosePopup: false,
     actualPage: 0,
+    updatingName: {
+      id: '0',
+      name: ''
+    },
+    succsessChangeName: false,
     passengersDeleteId: null,
     deleteData: {
       status: null,

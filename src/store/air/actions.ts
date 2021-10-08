@@ -2,7 +2,7 @@ import { ActionTree } from 'vuex'
 import { StateInterface } from '../index'
 import { AirInterface } from './state'
 import Axios from 'axios'
-import { AirCompanyList, AirPassengers, PasDelete } from '../../components/models'
+import { AirCompanyList, AirPassengers, PasDelete, NameChange } from '../../components/models'
 
 const actions: ActionTree<AirInterface, StateInterface> = {
   updateAirCompany (context, payload: Array<AirCompanyList>): void {
@@ -13,6 +13,9 @@ const actions: ActionTree<AirInterface, StateInterface> = {
   },
   updatePassengersActual (context, payload: Array<AirPassengers>): void {
     context.commit('changePassengersActual', payload)
+  },
+  updatePassengerName (context, payload: NameChange): void {
+    context.commit('changePassengerName', payload)
   },
   updateOpenCloseCard (context, payload: boolean): void {
     context.commit('changeOpenCloseCard', payload)
@@ -33,6 +36,10 @@ const actions: ActionTree<AirInterface, StateInterface> = {
     context.commit('changeDeleteData', payload)
   },
 
+  updateChangeName (context, payload: boolean): void {
+    context.commit('changesuccsesseName', payload)
+  },
+
   async updateAirlinesAxios (context) {
     const $this: any = this // eslint-disable-line
     await Axios.get('https://api.instantwebtools.net/v1/airlines')// eslint-disable-line
@@ -44,6 +51,22 @@ const actions: ActionTree<AirInterface, StateInterface> = {
         }
       })
   },
+
+  async updatePassengerNameAxios (context, payload:NameChange) {
+    console.log('payload', payload)
+    const $this: any = this // eslint-disable-line
+    await Axios.patch('https://api.instantwebtools.net/v1/passenger/'+ payload.id, { name: payload.name } )// eslint-disable-line
+      .then(resp => {
+        if (resp.status === 200) {
+          context.dispatch('updateChangeName', true)// eslint-disable-line
+          context.dispatch('updatePassengers', resp.data.data)// eslint-disable-line
+
+        } else {
+          console.log('Ошибка получения данных')
+        }
+      })
+  },
+
   async updatePassengersAxios (context, payload:number) {
     console.log('payload', payload)
     const $this: any = this // eslint-disable-line

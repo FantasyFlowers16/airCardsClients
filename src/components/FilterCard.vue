@@ -1,13 +1,25 @@
 <template>
   <div  class="b-filter-backdrop" :class="{_open:OpenCloseFilter}" >
-    <div class="b-filter__title"> Выберите компанию:</div>
-    <div class="b-filter__select-title" @click="openListCompanies">{{titleSelectCompany}}</div>
-    <div class="b-filter__select-container" :class="{_open:openSelectCompany}">
-      <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
-        <div @click="checkCompany(item.name)" class="b-filter__select-item-link">{{item.name}}</div>
+    <div class="b-filter__item-comtainer">
+    <div class="b-filter__item" >
+      <div class="b-filter__title"> Выберите компанию:</div>
+      <div class="b-filter__select-title" @click="openListCompanies">{{titleSelectCompany}}</div>
+      <div class="b-filter__select-container" :class="{_open:openSelectCompany}">
+        <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
+          <div @click="checkCompany(item.name)" class="b-filter__select-item-link">{{item.name}}</div>
+        </div>
       </div>
     </div>
-
+    <div class="b-filter__item" >
+      <div class="b-filter__title"> Выберите страну:</div>
+      <div class="b-filter__select-title" @click="openListCountres">{{titleSelectCountry}}</div>
+      <div class="b-filter__select-container" :class="{_open:openSelectCountry}">
+        <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
+          <div @click="checkCountry(item.country)" class="b-filter__select-item-link">{{item.country}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
     <div class="array" @click="closeFilter"></div>
  </div>
 </template>
@@ -28,8 +40,10 @@ class Props {
 export default class CompanyCard extends Vue.with(Props) {
   clickCount = 0;
   openSelectCompany = false
+  openSelectCountry = false
   loader = true
   titleSelectCompany = 'Выберите компанию:'
+  titleSelectCountry = 'Выберите страну'
 
   get OpenCloseFilter () : boolean {
     return this.$store.getters['filter/getOpenCloseFilter'] as boolean //eslint-disable-line
@@ -47,6 +61,26 @@ export default class CompanyCard extends Vue.with(Props) {
     return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
   }
 
+  // get ActualFilterCountry () : Array<FilteCompanyItem> {
+  //   const Filter:Array<FilteCompanyItem> = []
+  //   const CountresNames:Array<string> = []
+  //   console.log('AirPassengersActual', this.AirPassengersActual)
+  //   this.AirPassengersActual.forEach(el => {
+  //     if (CountresNames.indexOf(el.airline[0].country) === -1) {
+  //       CountresNames.push(el.airline[0].country)
+  //       const filterEl = {
+  //         check: false,
+  //         name: el.airline[0].name,
+  //         country: el.airline[0].country,
+  //         id: el.airline[0].id
+  //       }
+  //       Filter.push(filterEl)
+  //     }
+  //   })
+  //   this.updateFilteCompanyItem(Filter)
+  //   return Filter
+  // }
+
   get ActualFilter () : Array<FilteCompanyItem> {
     const Filter:Array<FilteCompanyItem> = []
     const CompanyNames:Array<string> = []
@@ -57,6 +91,7 @@ export default class CompanyCard extends Vue.with(Props) {
         const filterEl = {
           check: false,
           name: el.airline[0].name,
+          country: el.airline[0].country,
           id: el.airline[0].id
         }
         Filter.push(filterEl)
@@ -84,12 +119,28 @@ export default class CompanyCard extends Vue.with(Props) {
     console.log('openListCompanies')
   }
 
+  openListCountres () {
+    this.openSelectCountry = !this.openSelectCountry
+  }
+
+  checkCountry (name:string) {
+    this.titleSelectCountry = name
+    this.openSelectCountry = false
+    const FilterPoint = {
+      company: this.FilteredPoint.company,
+      namePas: this.FilteredPoint.namePas,
+      country: this.titleSelectCountry
+    }
+    this.updateFilteredPoint(FilterPoint)
+  }
+
   checkCompany (name:string) {
     this.titleSelectCompany = name
     this.openSelectCompany = false
     const FilterPoint = {
       company: this.titleSelectCompany,
-      namePas: this.FilteredPoint.namePas
+      namePas: this.FilteredPoint.namePas,
+      country: this.FilteredPoint.country
     }
     this.updateFilteredPoint(FilterPoint)
   }
@@ -129,6 +180,12 @@ export default class CompanyCard extends Vue.with(Props) {
   position: relative;
   // overflow-y: auto;
   // overflow-x: hidden;
+  &__item-comtainer{
+    display: flex;
+  }
+  &__item{
+    margin-right: 30px;
+  }
   &__title{
     font: 700 28px/28px "Comfortaa",sans-serif;
     color: $txtWhite;
@@ -144,6 +201,7 @@ export default class CompanyCard extends Vue.with(Props) {
     transition: max-height .3s ease;
     &._open{
       max-height: 500px;
+      overflow: auto;
       transition: max-height .2s ease;
     }
   }
