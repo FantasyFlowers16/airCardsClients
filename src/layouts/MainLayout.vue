@@ -29,6 +29,7 @@ export default class MainLayout extends Vue {
   async mounted () {
     // this.$router.push({ query:{ page: '0', size: '10' }})//eslint-disable-line
     await this.updatePassengersAxios(0)
+    console.log('данные загрузились')
     this.loader = false
   }
 }

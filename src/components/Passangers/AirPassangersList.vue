@@ -1,15 +1,15 @@
 <template>
   <div>
-    <div class="b-companies__pages">{{ActualPage}} {{titlePage}}</div>
-    <div class="b-companies" id="companies-container">
-      <div v-for="item in FilteredActualPassangers" :key="item._id"  class="b-companies__item" @click="openItem(item)">
-        <air-company :data = "item" />
-        <div class="b-companies__item-bg"></div>
+    <div class="b-pass__pages">{{ActualPage}} {{titlePage}}</div>
+    <div class="b-pass">
+      <div v-for="item in FilteredActualPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
+        <air-pass-item :data = "item" />
+        <div class="b-pass__item-bg"></div>
       </div>
     </div>
-    <loader v-if="loader" class="b-companies__load"></loader>
+    <loader v-if="loader" class="b-pass__load"></loader>
     <transition name="showCard">
-      <air-pass-card :data ="this.actualItem" v-if="OpenCloseCard"></air-pass-card>
+      <air-pass-card :data ="this.PassengerActiveCard" v-if="OpenCloseCard"></air-pass-card>
     </transition>
     <transition name="showCard">
       <popup-card v-if="OpenClosePopup"></popup-card>
@@ -20,11 +20,11 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import AirCompany from './AirCompany.vue'
+import AirPassItem from './AirPassangersItem.vue'
 import AirPassCard from './AirPassCard.vue'
-import Loader from './loader.vue'
-import PopupCard from './Popap.vue'
-import { AirCompanyList, AirPassengers, FilterPoint } from './models'
+import Loader from '../loader.vue'
+import PopupCard from '../Popap.vue'
+import { AirCompanyList, AirPassengers, FilterPoint } from '../../components/models'
 
 class Props {
   readonly title!: string;
@@ -33,7 +33,7 @@ class Props {
 }
 
 @Options({
-  components: { AirCompany, AirPassCard, Loader, PopupCard }
+  components: { AirPassItem, AirPassCard, Loader, PopupCard }
   // watch: {
   //   Passengers: value => {
   //     console.log('Nastia', value)
@@ -44,7 +44,7 @@ class Props {
 })
 
 export default class AirCompanies extends Vue.with(Props) {
-  loader = false
+  loader = true
   openCard = false
   PassengersList: Array<AirPassengers> = []
   CompanyNames:Array<string> = []
@@ -63,6 +63,10 @@ export default class AirCompanies extends Vue.with(Props) {
     return this.$store.getters['air/getAirList'] as Array<AirCompanyList>  //eslint-disable-line
   }
 
+  get PassengerActiveCard () : AirPassengers {
+    return this.$store.getters['air/getPassengerActiveCard'] as AirPassengers  //eslint-disable-line
+  }
+
   get OpenClosePopup () {
     return this.$store.getters['air/getOpenClosePopup'] as boolean  //eslint-disable-line
   }
@@ -73,7 +77,7 @@ export default class AirCompanies extends Vue.with(Props) {
 
   get FilteredActualPassangers () : Array<AirPassengers> {
     this.loader = true
-    let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.ActualPassangers))//eslint-disable-line
+    let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.PassengersActual))//eslint-disable-line
     // console.log('FilteredPoint', this.FilteredPoint)
     if (this.FilteredPoint.company !== '') {
       console.log('mi tut')
@@ -94,13 +98,15 @@ export default class AirCompanies extends Vue.with(Props) {
     // return ActualPas
   }
 
-  get ActualPassangers () : Array<AirPassengers> {
+  get CountActualPassangers () : Array<AirPassengers> {
     if (this.Passengers) {
       this.Passengers.forEach(el => {
         this.PassengersList.push(el)//eslint-disable-line
       })
       const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
       this.updatePassengersActual(actualPas)
+    } else {
+      this.loader = true
     }
     if (this.PassengersDeleteId) {
       this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
@@ -159,6 +165,10 @@ export default class AirCompanies extends Vue.with(Props) {
     this.$store.dispatch('air/updatePassengersActual',val) //eslint-disable-line
   }
 
+  updateActivePassenger (val: AirPassengers) {
+    this.$store.dispatch('air/updateActivePassenger',val) //eslint-disable-line
+  }
+
   updateActualPage (val: number) {
     this.$store.dispatch('air/updateActualPage', val) //eslint-disable-line
   }
@@ -179,7 +189,7 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 
   openItem (AirPassengers:AirPassengers) {
-    this.actualItem = AirPassengers
+    this.updateActivePassenger(AirPassengers)
     this.updateOpCloseCard(true)
   }
 }
@@ -208,7 +218,7 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 }
 
-.b-companies{
+.b-pass{
   display: flex;
   width: 100%;
   flex-wrap: wrap;
@@ -257,7 +267,7 @@ export default class AirCompanies extends Vue.with(Props) {
     transition: baclground-color .5s ease, opacity .5s ease;
 
   }
-  &__item{
+  &__item-card{
     position: relative;
     padding: 10px;
     border-radius: 10px;
@@ -267,7 +277,7 @@ export default class AirCompanies extends Vue.with(Props) {
     box-shadow: 10px 5px 5px rgb(148, 148, 148);
     cursor: pointer;
     &:hover{
-      .b-companies__item-bg{
+      .b-pass__item-bg{
         background-color: black;
         opacity: .8
       }

@@ -9,7 +9,11 @@ const actions: ActionTree<AirInterface, StateInterface> = {
     context.commit('changeAirList', payload)
   },
   updatePassengers (context, payload: Array<AirPassengers>): void {
+    console.log('Passangers Update6666')
     context.commit('changePassengers', payload)
+  },
+  updateActivePassenger (context, payload: AirPassengers): void {
+    context.commit('changeActivePassenger', payload)
   },
   updatePassengersActual (context, payload: Array<AirPassengers>): void {
     context.commit('changePassengersActual', payload)
@@ -59,8 +63,7 @@ const actions: ActionTree<AirInterface, StateInterface> = {
       .then(resp => {
         if (resp.status === 200) {
           context.dispatch('updateChangeName', true)// eslint-disable-line
-          context.dispatch('updatePassengers', resp.data.data)// eslint-disable-line
-
+          // context.dispatch('updatePassengers', resp.data.data)// eslint-disable-line
         } else {
           console.log('Ошибка получения данных')
         }
@@ -68,6 +71,7 @@ const actions: ActionTree<AirInterface, StateInterface> = {
   },
 
   async updatePassengersAxios (context, payload:number) {
+    console.log(6666666)
     console.log('payload', payload)
     const $this: any = this // eslint-disable-line
     await Axios.get('https://api.instantwebtools.net/v1/passenger?page='+ payload +'&size=10')// eslint-disable-line

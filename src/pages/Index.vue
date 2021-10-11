@@ -16,12 +16,11 @@
 </template>
 
 <script lang="ts">
-import AirPass from 'src/components/AirPass.vue'
-import WeatherCard from 'src/components/WeatherCard.vue'
-import FilterCard from 'src/components/FilterCard.vue'
-import AirlinesCard from 'src/components/AirlinesCard.vue'
+import AirPass from 'src/components/Passangers/AirPassangersList.vue'
+import WeatherCard from 'src/components/Weather/WeatherCard.vue'
+import FilterCard from 'src/components/Filter/FilterCard.vue'
+import AirlinesCard from 'src/components/Companies/AirlinesCard.vue'
 import { Vue, Options } from 'vue-class-component'
-// import {  } from '../components/models'
 
 @Options({
   components: { AirPass, WeatherCard, AirlinesCard, FilterCard }

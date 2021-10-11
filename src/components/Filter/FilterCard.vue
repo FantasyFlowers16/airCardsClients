@@ -26,8 +26,8 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirPassengers, FilteCompanyItem, FilterPoint } from '../components/models'
-import Loader from './loader.vue'
+import { AirPassengers, FilteCompanyItem, FilterPoint } from '../models'
+import Loader from '../loader.vue'
 
 class Props {
   readonly data!: AirPassengers;

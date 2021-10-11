@@ -9,6 +9,9 @@ const mutation: MutationTree<AirInterface> = {
   changePassengers (state: AirInterface, payload: Array<AirPassengers>):void {
     state.passengers = payload
   },
+  changeActivePassenger (state: AirInterface, payload: AirPassengers):void {
+    state.passengerActiveCard = payload
+  },
   changePassengerName (state: AirInterface, payload: NameChange):void {
     state.updatingName = payload
   },

@@ -1,36 +1,36 @@
 <template>
   <div>
-    <div class="b-company__item">
-      <div class="b-company__user-block ">
-        <div class="b-company__user-img-container">
-          <img class="b-company__user-img" src="../assets/icons/user.svg">
+    <div class="b-pass__item">
+      <div class="b-pass__user-block ">
+        <div class="b-pass__user-img-container">
+          <img class="b-pass__user-img" src="../../assets/icons/user.svg">
         </div>
-        <div class="b-company__info-block">
-          <div class="b-company__text">{{data.name}}</div>
+        <div class="b-pass__info-block">
+          <div class="b-pass__text">{{data.name}}</div>
         </div>
       </div>
-      <div class="b-company__data-container">
-        <div class="b-company__info-block">
-          <div class="b-company__title">Название компании: </div>
-          <div class="b-company__text">{{data.airline[0].name}}</div>
+      <div class="b-pass__data-container">
+        <div class="b-pass__info-block">
+          <div class="b-pass__title">Название компании: </div>
+          <div class="b-pass__text">{{data.airline[0].name}}</div>
         </div>
-        <div class="b-company__info-block">
-          <div class="b-company__title">Страна:</div>
-          <div class="b-company__text">{{data.airline[0].country}}</div>
+        <div class="b-pass__info-block">
+          <div class="b-pass__title">Страна:</div>
+          <div class="b-pass__text">{{data.airline[0].country}}</div>
         </div>
-        <div class="b-company__info-block">
-          <div class="b-company__title">Слоган:</div>
-          <div class="b-company__text">{{data.airline[0].slogan}}</div>
+        <div class="b-pass__info-block">
+          <div class="b-pass__title">Слоган:</div>
+          <div class="b-pass__text">{{data.airline[0].slogan}}</div>
         </div>
-        <div class="b-company__info-block">
-          <div class="b-company__title">Штаб-квартира:</div>
-          <div class="b-company__text">{{data.airline[0].head_quaters}}</div>
+        <div class="b-pass__info-block">
+          <div class="b-pass__title">Штаб-квартира:</div>
+          <div class="b-pass__text">{{data.airline[0].head_quaters}}</div>
         </div>
-        <div class="b-company__info-block">
-          <div class="b-company__title">Сайт:</div>
-          <div class="b-company__text">{{data.airline[0].website}}</div>
+        <div class="b-pass__info-block">
+          <div class="b-pass__title">Сайт:</div>
+          <div class="b-pass__text">{{data.airline[0].website}}</div>
         </div>
-        <q-img class="b-company__img" :src="data.airline[0].logo"></q-img>
+        <q-img class="b-pass__img" :src="data.airline[0].logo"></q-img>
       </div>
     </div>
   </div>
@@ -38,7 +38,7 @@
 
 <script lang="ts">
 import { Vue } from 'vue-class-component'
-import { AirPassengers } from '../components/models'
+import { AirPassengers } from '../models'
 
 class Props {
   readonly data!: AirPassengers;
@@ -55,7 +55,7 @@ export default class AirCompany extends Vue.with(Props) {
 }
 </script>
 <style lang="scss">
-.b-company{
+.b-pass{
   &__data-container{
     padding: 15px;
   }

@@ -19,8 +19,8 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirCompanyList } from './models'
-import Loader from './loader.vue'
+import { AirCompanyList } from '../../components/models'
+import Loader from '../loader.vue'
 import FilterCardCompany from './AirlinesCardItem.vue'
 
 class Props {

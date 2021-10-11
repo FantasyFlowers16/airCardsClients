@@ -8,6 +8,7 @@ export interface AirInterface {
   openCloseCompanies:boolean
   passengers: Array<AirPassengers>,
   passengersActual: Array<AirPassengers>,
+  passengerActiveCard: AirPassengers,
   passengersDeleteId:string | null,
   deleteData: PasDelete,
   updatingName:NameChange,
@@ -29,6 +30,11 @@ function state (): AirInterface {
         established: 'string'
       }
     ],
+    passengerActiveCard: {
+      _id: '',
+      name: '',
+      airline: []
+    },
     passengers: [],
     passengersActual: [],
     openCloseCard: false,

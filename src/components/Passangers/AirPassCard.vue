@@ -1,57 +1,55 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 <template>
-  <div class="b-company-card-backdrop">
-    <div class="b-company-card">
-      <div class="b-company-card__item">
-          <q-img class="b-company-card__img" :src="data.airline[0].logo"></q-img>
-          <div class="b-company-card__data-container">
-            <div class="b-company-card__info-block" >
-              <div class="b-company-card__title">Имя пассажира: </div>
-              <div class="b-company-card__text"  :class="{_load:loader}">{{data.name}}</div>
-              <div class="b-company-card__redact-name" v-if="!redactForm" @click="redactName"></div>
-              <div class="b-company-card__succsess-name" v-if="ChangeName" @click="redactName"></div>
+  <div class="b-pass-card-backdrop">
+    <div class="b-pass-card">
+      <div class="b-pass-card__item">
+          <q-img class="b-pass-card__img" :src="data.airline[0].logo"></q-img>
+          <div class="b-pass-card__data-container">
+            <div class="b-pass-card__info-block" >
+              <div class="b-pass-card__title">Имя пассажира: </div>
+              <div class="b-pass-card__text"  :class="{_load:loader}">{{data.name}}</div>
+              <div class="b-pass-card__redact-name" v-if="!redactForm" @click="redactName"></div>
+              <div class="b-pass-card__succsess-name" v-if="ChangeName" @click="redactName"></div>
             </div>
-            <div class="b-company__info-block" v-if="redactForm && !ChangeName">
-              <q-input class="b-company-card__input input" color="black" v-model="name" />
-              <q-btn class="but b-company-card__but " @click="changePasName">Изменить</q-btn>
+            <div class="b-pass__info-block" v-if="redactForm && !ChangeName">
+              <q-input class="b-pass-card__input input" color="black" v-model="name" />
+              <q-btn class="but b-pass-card__but " @click="changePasName">Изменить</q-btn>
              </div>
-            <div class="b-company__info-block">
-              <div class="b-company-card__title">Название компании: </div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].name}}</div>
+            <div class="b-pass__info-block">
+              <div class="b-pass-card__title">Название компании: </div>
+              <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].name}}</div>
             </div>
-            <div class="b-company-card__info-block">
-              <div class="b-company-card__title">Страна:</div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].country}}</div>
+            <div class="b-pass-card__info-block">
+              <div class="b-pass-card__title">Страна:</div>
+              <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].country}}</div>
             </div>
-            <div class="b-company-card__info-block">
-              <div class="b-company-card__title">Слоган:</div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].slogan}}</div>
+            <div class="b-pass-card__info-block">
+              <div class="b-pass-card__title">Слоган:</div>
+              <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].slogan}}</div>
             </div>
-            <div class="b-company-card__info-block">
-              <div class="b-company-card__title">Штаб-квартира:</div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].head_quaters}}</div>
+            <div class="b-pass-card__info-block">
+              <div class="b-pass-card__title">Штаб-квартира:</div>
+              <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].head_quaters}}</div>
             </div>
-            <div class="b-company-card__info-block">
-              <div class="b-company-card__title">Сайт:</div>
-              <div class="b-company-card__text" :class="{_load:loader}">{{data.airline[0].website}}</div>
+            <div class="b-pass-card__info-block">
+              <div class="b-pass-card__title">Сайт:</div>
+              <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].website}}</div>
             </div>
           </div>
       </div>
-      <div class="b-company-card__delete-but-container">
+      <div class="b-pass-card__delete-but-container">
         <q-btn class="but" color="black" @click="deletePas"> Удалить</q-btn>
       </div>
-      <div class="b-company-card__fon"></div>
-      <div class="b-company-card__close" @click="closeCard"></div>
+      <div class="b-pass-card__fon"></div>
+      <div class="b-pass-card__close" @click="closeCard"></div>
     </div>
-    <loader v-if="loader" class="b-company-card__load"></loader>
+    <loader v-if="loader" class="b-pass-card__load"></loader>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirPassengers, NameChange } from '../components/models'
-import Loader from './loader.vue'
+import { AirPassengers, NameChange } from '../models'
+import Loader from '../loader.vue'
 
 class Props {
   readonly data!: AirPassengers;
@@ -71,6 +69,10 @@ export default class CompanyCard extends Vue.with(Props) {
     return this.$store.getters['air/getPassengers'] as Array<AirPassengers>  //eslint-disable-line
   }
 
+  get PassengerActiveCard () : AirPassengers {
+    return this.$store.getters['air/getPassengerActiveCard'] as AirPassengers  //eslint-disable-line
+  }
+
   get ChangeName () : boolean {
     return this.$store.getters['air/getChangeName'] as boolean //eslint-disable-line
   }
@@ -87,6 +89,10 @@ export default class CompanyCard extends Vue.with(Props) {
     this.$store.dispatch('air/updatePassengers',val) //eslint-disable-line
   }
 
+  updatePassengersActual (val: Array<AirPassengers>) {
+    this.$store.dispatch('air/updatePassengersActual',val) //eslint-disable-line
+  }
+
   updatePassengersDeleteId (val: string|null) {
     this.$store.dispatch('air/updatePassengersDeleteId',val) //eslint-disable-line
   }
@@ -99,16 +105,16 @@ export default class CompanyCard extends Vue.with(Props) {
     this.$store.dispatch('air/updateChangeName',val) //eslint-disable-line
   }
 
-  updatePassengersAxios (val: number) {
-    this.$store.dispatch('air/updatePassengersAxios', val) //eslint-disable-line
-  }
-
   async deletePassengersAxios (val: string) {
     await this.$store.dispatch('air/deletePassengersAxios',val) //eslint-disable-line
   }
 
   updatePassengerNameAxios (val: NameChange) {
     this.$store.dispatch('air/updatePassengerNameAxios',val) //eslint-disable-line
+  }
+
+  updateActivePassenger (val: AirPassengers) {
+    this.$store.dispatch('air/updateActivePassenger',val) //eslint-disable-line
   }
 
   mounted () {
@@ -136,18 +142,17 @@ export default class CompanyCard extends Vue.with(Props) {
     console.log('id', this.data.airline[0].id)
     this.updatePassengerNameAxios({ id: this.data._id, name: this.name })
     let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.Passengers))//eslint-disable-line
-    if (Passengers) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      Passengers.forEach((el:AirPassengers) => {
-        if (el._id === this.data._id) {
-          el.name = this.name
-        }
-      })
-      this.updatePassengers(Passengers)
-      console.log(this.Passengers)
-    }
-
-    // this.updatePassengersAxios(1)
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    Passengers.forEach((el:AirPassengers) => {
+      if (el._id === this.data._id) {
+        el.name = this.name
+      }
+    })
+    this.updatePassengersActual(Passengers)
+    const AtivePassenger:AirPassengers = JSON.parse(JSON.stringify(this.PassengerActiveCard))//eslint-disable-line
+    AtivePassenger.name = this.name
+    console.log(AtivePassenger)
+    this.updateActivePassenger(AtivePassenger)
   }
 
   closeCard () {
@@ -157,7 +162,7 @@ export default class CompanyCard extends Vue.with(Props) {
 }
 </script>
 <style lang="scss">
-.b-company-card-backdrop{
+.b-pass-card-backdrop{
   position: fixed;
   top: 0;
   left: 0;
@@ -169,7 +174,7 @@ export default class CompanyCard extends Vue.with(Props) {
   z-index: 10;
   align-items: center;
 }
-.b-company-card{
+.b-pass-card{
   width: 60%;
   padding: 20px;
   border-radius: 20px;

@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { AirCompanyList } from './models'
-import Loader from './loader.vue'
+import { AirCompanyList } from '../models'
+import Loader from '../loader.vue'
 
 class Props {
   readonly data!: AirCompanyList;

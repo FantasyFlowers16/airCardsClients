@@ -40,8 +40,8 @@
 
 <script lang="ts">
 import { Vue, Options } from 'vue-class-component'
-import { DataWeather, PointWeather } from './models'
-import Loader from './loader.vue'
+import { DataWeather, PointWeather } from '../models'
+import Loader from '../loader.vue'
 
 class Props {
 }

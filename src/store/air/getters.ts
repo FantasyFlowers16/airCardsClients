@@ -10,6 +10,9 @@ const getters: GetterTree<AirInterface, StateInterface> = {
   getPassengersActual (context) : Array<AirPassengers> {
     return context.passengersActual
   },
+  getPassengerActiveCard (context) : AirPassengers {
+    return context.passengerActiveCard
+  },
   getPassengers (context) : Array<AirPassengers> {
     return context.passengers
   },
