@@ -51,6 +51,7 @@ export default class Popup extends Vue.with(Props) {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 .b-popup{
   padding: 40px;

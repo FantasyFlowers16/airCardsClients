@@ -62,7 +62,7 @@ class Props {
 export default class CompanyCard extends Vue.with(Props) {
   clickCount = 0;
   loader = true
-  name = ''
+  name = this.data.name
   redactForm = false
 
   get Passengers () : Array<AirPassengers> {
@@ -75,6 +75,10 @@ export default class CompanyCard extends Vue.with(Props) {
 
   get ChangeName () : boolean {
     return this.$store.getters['air/getChangeName'] as boolean //eslint-disable-line
+  }
+
+  get PassengersActual () : Array<AirPassengers> {
+    return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
   }
 
   updateOpClosenCard (val: boolean) {
@@ -141,7 +145,7 @@ export default class CompanyCard extends Vue.with(Props) {
   changePasName () {
     console.log('id', this.data.airline[0].id)
     this.updatePassengerNameAxios({ id: this.data._id, name: this.name })
-    let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.Passengers))//eslint-disable-line
+    let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.PassengersActual))//eslint-disable-line
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     Passengers.forEach((el:AirPassengers) => {
       if (el._id === this.data._id) {
@@ -151,7 +155,7 @@ export default class CompanyCard extends Vue.with(Props) {
     this.updatePassengersActual(Passengers)
     const AtivePassenger:AirPassengers = JSON.parse(JSON.stringify(this.PassengerActiveCard))//eslint-disable-line
     AtivePassenger.name = this.name
-    console.log(AtivePassenger)
+    console.log(Passengers)
     this.updateActivePassenger(AtivePassenger)
   }
 

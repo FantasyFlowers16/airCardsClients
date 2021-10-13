@@ -1,11 +1,11 @@
 <template>
-  <div  class="b-filter-backdrop" :class="{_open:OpenCloseFilter}" >
+  <div  class="b-filter-backdrop" :class="{_open:OpenCloseFilter}" @click="whatIsClick">
     <div class="b-filter__item-comtainer">
     <div class="b-filter__item" >
       <div class="b-filter__title"> Выберите компанию:</div>
       <div class="b-filter__select-title" @click="openListCompanies">{{titleSelectCompany}}</div>
       <div class="b-filter__select-container" :class="{_open:openSelectCompany}">
-        <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
+        <div v-for="item in FilterCompanyItem" :key="item.id" class="b-filter__select-item">
           <div @click="checkCompany(item.name)" class="b-filter__select-item-link">{{item.name}}</div>
         </div>
       </div>
@@ -14,7 +14,7 @@
       <div class="b-filter__title"> Выберите страну:</div>
       <div class="b-filter__select-title" @click="openListCountres">{{titleSelectCountry}}</div>
       <div class="b-filter__select-container" :class="{_open:openSelectCountry}">
-        <div v-for="item in FilteCompanyItem" :key="item.id" class="b-filter__select-item">
+        <div v-for="item in FilterCompanyItem" :key="item.id" class="b-filter__select-item">
           <div @click="checkCountry(item.country)" class="b-filter__select-item-link">{{item.country}}</div>
         </div>
       </div>
@@ -49,8 +49,8 @@ export default class CompanyCard extends Vue.with(Props) {
     return this.$store.getters['filter/getOpenCloseFilter'] as boolean //eslint-disable-line
   }
 
-  get FilteCompanyItem () : Array<FilteCompanyItem> {
-    return this.$store.getters['filter/getFilteCompanyItem'] as Array<FilteCompanyItem>  //eslint-disable-line
+  get FilterCompanyItem () : Array<FilteCompanyItem> {
+    return this.$store.getters['filter/getFilterCompanyItem'] as Array<FilteCompanyItem>  //eslint-disable-line
   }
 
   get FilteredPoint () : FilterPoint {
@@ -81,24 +81,24 @@ export default class CompanyCard extends Vue.with(Props) {
   //   return Filter
   // }
 
-  get ActualFilter () : Array<FilteCompanyItem> {
-    const Filter:Array<FilteCompanyItem> = []
-    const CompanyNames:Array<string> = []
-    console.log('AirPassengersActual', this.AirPassengersActual)
-    this.AirPassengersActual.forEach(el => {
-      if (CompanyNames.indexOf(el.airline[0].name) === -1) {
-        CompanyNames.push(el.airline[0].name)
-        const filterEl = {
-          check: false,
-          name: el.airline[0].name,
-          country: el.airline[0].country,
-          id: el.airline[0].id
+  created () {
+    this.$watch('AirPassengersActual', () => {
+      const Filter:Array<FilteCompanyItem> = []
+      const CompanyNames:Array<string> = []
+      this.AirPassengersActual.forEach(el => {
+        if (CompanyNames.indexOf(el.airline[0].name) === -1) {
+          CompanyNames.push(el.airline[0].name)
+          const filterEl = {
+            check: false,
+            name: el.airline[0].name,
+            country: el.airline[0].country,
+            id: el.airline[0].id
+          }
+          Filter.push(filterEl)
         }
-        Filter.push(filterEl)
-      }
+      })
+      this.updateFilteCompanyItem(Filter)
     })
-    this.updateFilteCompanyItem(Filter)
-    return Filter
   }
 
   updateOpCloseFilter (val: boolean) {
@@ -113,13 +113,21 @@ export default class CompanyCard extends Vue.with(Props) {
     this.$store.dispatch('filter/updateFilteredPoint',val) //eslint-disable-line
   }
 
+  mounted () {
+    console.log('ActualFilter2', this.AirPassengersActual)
+  }
+
+  whatIsClick (e: Event) {
+    console.log(e.target)
+  }
+
   openListCompanies () {
     this.openSelectCompany = !this.openSelectCompany
-    console.log('ActualFilter', this.ActualFilter)
     console.log('openListCompanies')
   }
 
   openListCountres () {
+    console.log('openListCountres')
     this.openSelectCountry = !this.openSelectCountry
   }
 
@@ -200,7 +208,7 @@ export default class CompanyCard extends Vue.with(Props) {
     overflow: hidden;
     transition: max-height .3s ease;
     &._open{
-      max-height: 500px;
+      max-height: 300px;
       overflow: auto;
       transition: max-height .2s ease;
     }

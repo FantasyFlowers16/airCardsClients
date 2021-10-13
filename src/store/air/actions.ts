@@ -57,7 +57,6 @@ const actions: ActionTree<AirInterface, StateInterface> = {
   },
 
   async updatePassengerNameAxios (context, payload:NameChange) {
-    console.log('payload', payload)
     const $this: any = this // eslint-disable-line
     await Axios.patch('https://api.instantwebtools.net/v1/passenger/'+ payload.id, { name: payload.name } )// eslint-disable-line
       .then(resp => {
@@ -71,8 +70,6 @@ const actions: ActionTree<AirInterface, StateInterface> = {
   },
 
   async updatePassengersAxios (context, payload:number) {
-    console.log(6666666)
-    console.log('payload', payload)
     const $this: any = this // eslint-disable-line
     await Axios.get('https://api.instantwebtools.net/v1/passenger?page='+ payload +'&size=10')// eslint-disable-line
       .then(resp => {
@@ -85,7 +82,6 @@ const actions: ActionTree<AirInterface, StateInterface> = {
   },
 
   async deletePassengersAxios (context, payload:number) {
-    console.log('payload', payload)
     const $this: any = this // eslint-disable-line
     await Axios.delete('https://api.instantwebtools.net/v1/passenger/' + payload)// eslint-disable-line
       .then(resp => {

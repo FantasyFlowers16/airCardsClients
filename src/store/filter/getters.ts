@@ -8,7 +8,7 @@ const getters: GetterTree<FilterInterface, StateInterface> = {
     return context.openCloseFilter
   },
 
-  getFilteCompanyItem (context) : Array<FilteCompanyItem> {
+  getFilterCompanyItem (context) : Array<FilteCompanyItem> {
     return context.filterCompanies
   },
 

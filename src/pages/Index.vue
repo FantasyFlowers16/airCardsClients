@@ -6,7 +6,7 @@
       <div class="b-widget__item b-widget__item--filter" @click="openFilter"></div>
     </div>
     <air-pass
-      title="Example title"
+      title="Passangers"
       active
     ></air-pass>
     <weather-card></weather-card>

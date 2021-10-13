@@ -49,6 +49,9 @@ export default class AirCompany extends Vue.with(Props) {
   clickCount = 0;
   loader = false
 
+  mounted () {
+    console.log('start item')
+  }
   // async updateAirList (val:number) {
   //   await this.$store.dispatch('air/updateAirCompanyAxios') //eslint-disable-line
   // }

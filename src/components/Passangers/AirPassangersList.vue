@@ -1,12 +1,13 @@
 <template>
   <div>
     <div class="b-pass__pages">{{ActualPage}} {{titlePage}}</div>
-    <div class="b-pass">
+    <div class="b-pass" >
       <div v-for="item in FilteredActualPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
         <air-pass-item :data = "item" />
         <div class="b-pass__item-bg"></div>
       </div>
     </div>
+    <div v-if="filterText" class="b-pass__filter-text">{{filterText}}</div>
     <loader v-if="loader" class="b-pass__load"></loader>
     <transition name="showCard">
       <air-pass-card :data ="this.PassengerActiveCard" v-if="OpenCloseCard"></air-pass-card>
@@ -14,8 +15,7 @@
     <transition name="showCard">
       <popup-card v-if="OpenClosePopup"></popup-card>
     </transition>
-
-</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -36,9 +36,9 @@ class Props {
   components: { AirPassItem, AirPassCard, Loader, PopupCard }
   // watch: {
   //   Passengers: value => {
-  //     console.log('Nastia', value)
   //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  //     this.count = 1
+  //     this.CountActualPassangers()
+  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   //   }
   // }
 })
@@ -48,12 +48,8 @@ export default class AirCompanies extends Vue.with(Props) {
   openCard = false
   PassengersList: Array<AirPassengers> = []
   CompanyNames:Array<string> = []
+  filterText = ''
   actualItem:AirPassengers|null = null
-  // created () {
-  //   this.$watch("Passengers", () => {
-  //     this.updatePassengersActual(this.PassengersList)
-  //   })
-  // }
 
   get PassengersDeleteId () : string | null {
     return this.$store.getters['air/getPassengersDeleteId'] as string | null  //eslint-disable-line
@@ -78,17 +74,34 @@ export default class AirCompanies extends Vue.with(Props) {
   get FilteredActualPassangers () : Array<AirPassengers> {
     this.loader = true
     let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.PassengersActual))//eslint-disable-line
-    // console.log('FilteredPoint', this.FilteredPoint)
-    if (this.FilteredPoint.company !== '') {
-      console.log('mi tut')
-      const NewAirPas: Array<AirPassengers> = []
-      ActualPas.forEach(el => {
-        if (el.airline[0].name === this.FilteredPoint.company) {
-          NewAirPas.push(el)
+    if (this.FilteredPoint.company !== '' || this.FilteredPoint.country !== '') {
+      if (this.FilteredPoint.company !== '') {
+        this.loader = true
+        const NewAirPas: Array<AirPassengers> = []
+        ActualPas.forEach(el => {
+          if (el.airline[0].name === this.FilteredPoint.company) {
+            NewAirPas.push(el)
+          }
+        })
+        ActualPas = NewAirPas
+        this.loader = false
+      }
+      if (this.FilteredPoint.country !== '') {
+        this.loader = true
+        const NewAirPas: Array<AirPassengers> = []
+        ActualPas.forEach(el => {
+          if (el.airline[0].country === this.FilteredPoint.country) {
+            NewAirPas.push(el)
+          }
+        })
+        ActualPas = NewAirPas
+        this.loader = false
+        if (!ActualPas.length && this.PassengersActual.length) {
+          this.filterText = 'Нет подходящих вариантов для вашего поиска'
+        } else {
+          this.filterText = ''
         }
-      })
-      ActualPas = NewAirPas
-      this.loader = false
+      }
       return ActualPas
     } else {
       this.loader = false
@@ -98,24 +111,25 @@ export default class AirCompanies extends Vue.with(Props) {
     // return ActualPas
   }
 
-  get CountActualPassangers () : Array<AirPassengers> {
-    if (this.Passengers) {
-      this.Passengers.forEach(el => {
-        this.PassengersList.push(el)//eslint-disable-line
-      })
-      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-      this.updatePassengersActual(actualPas)
-    } else {
-      this.loader = true
-    }
-    if (this.PassengersDeleteId) {
-      this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
-      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-      this.updatePassengersActual(actualPas)
-      this.updatePassengersDeleteId(null)
-    }
-    return this.PassengersList//eslint-disable-line
-  }
+  // get CountActualPassangers () : Array<AirPassengers> {
+  //   console.log('Passengers2', this.Passengers)
+  //   if (this.Passengers) {
+  //     this.Passengers.forEach(el => {
+  //       this.PassengersList.push(el)//eslint-disable-line
+  //     })
+  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+  //     this.updatePassengersActual(actualPas)
+  //   } else {
+  //     this.loader = true
+  //   }
+  //   if (this.PassengersDeleteId) {
+  //     this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
+  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+  //     this.updatePassengersActual(actualPas)
+  //     this.updatePassengersDeleteId(null)
+  //   }
+  //   return this.PassengersList//eslint-disable-line
+  // }
 
   get PassengersActual () : Array<AirPassengers> {
     return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
@@ -149,7 +163,14 @@ export default class AirCompanies extends Vue.with(Props) {
     return titlePage
   }
 
+  created () {
+    this.$watch('Passengers', () => {
+      this.CountActualPassangers()
+    })
+  }
+
   mounted () {
+    console.log('start')
     window.addEventListener('scroll', this.loockScroll) //eslint-disable-line
   }
 
@@ -175,6 +196,24 @@ export default class AirCompanies extends Vue.with(Props) {
 
   updateOpCloseCard (val: boolean) {
     this.$store.dispatch('air/updateOpenCloseCard',val) //eslint-disable-line
+  }
+
+  CountActualPassangers () {
+    if (this.Passengers) {
+      this.Passengers.forEach(el => {
+        this.PassengersList.push(el)//eslint-disable-line
+      })
+      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+      this.updatePassengersActual(actualPas)
+    } else {
+      this.loader = true
+    }
+    if (this.PassengersDeleteId) {
+      this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
+      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+      this.updatePassengersActual(actualPas)
+      this.updatePassengersDeleteId(null)
+    }
   }
 
   async loockScroll () {
@@ -218,11 +257,26 @@ export default class AirCompanies extends Vue.with(Props) {
   }
 }
 
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active до версии 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
 .b-pass{
   display: flex;
   width: 100%;
   flex-wrap: wrap;
   position: relative;
+  &__filter-text{
+    margin-top: 60px;
+    justify-content: center;
+    font: 700 28px/28px "Comfortaa",sans-serif;
+    display: flex;
+    justify-content: center;
+  }
   &__pages{
     position: sticky;
     font: 700 28px/28px "Comfortaa",sans-serif;
