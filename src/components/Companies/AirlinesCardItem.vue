@@ -52,9 +52,6 @@ export default class FilterCard extends Vue.with(Props) {
     this.openCard = true
     console.log('openBlock')
   }
-  // get CurrentImgDaily ():string {
-  //   return 'http://openweathermap.org/img/wn/' + this.DataWeather.daily[0].weather[0].icon + '@2x.png'//eslint-disable-line
-  // }
 }
 </script>
 <style lang="scss" >

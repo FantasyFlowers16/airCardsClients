@@ -77,10 +77,6 @@ export default class CompanyCard extends Vue.with(Props) {
     return this.$store.getters['air/getChangeName'] as boolean //eslint-disable-line
   }
 
-  get PassengersActual () : Array<AirPassengers> {
-    return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
-  }
-
   updateOpClosenCard (val: boolean) {
     this.$store.dispatch('air/updateOpenCloseCard',val) //eslint-disable-line
   }
@@ -89,12 +85,8 @@ export default class CompanyCard extends Vue.with(Props) {
     this.$store.dispatch('air/updateOpenClosePopup',val) //eslint-disable-line
   }
 
-  updatePassengers (val: Array<AirPassengers>) {
-    this.$store.dispatch('air/updatePassengers',val) //eslint-disable-line
-  }
-
-  updatePassengersActual (val: Array<AirPassengers>) {
-    this.$store.dispatch('air/updatePassengersActual',val) //eslint-disable-line
+  updatePassengersFull (val: Array<AirPassengers>) {
+    this.$store.dispatch('air/updatePassengersFull',val) //eslint-disable-line
   }
 
   updatePassengersDeleteId (val: string|null) {
@@ -143,19 +135,18 @@ export default class CompanyCard extends Vue.with(Props) {
   }
 
   changePasName () {
-    console.log('id', this.data.airline[0].id)
     this.updatePassengerNameAxios({ id: this.data._id, name: this.name })
-    let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.PassengersActual))//eslint-disable-line
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    let Passengers:Array<AirPassengers> = JSON.parse(JSON.stringify(this.Passengers))//eslint-disable-line
     Passengers.forEach((el:AirPassengers) => {
       if (el._id === this.data._id) {
         el.name = this.name
       }
     })
-    this.updatePassengersActual(Passengers)
+    this.updatePassengersFull(Passengers)
+    console.log('Passengers', Passengers)
+    console.log('this.Passengers', this.Passengers)
     const AtivePassenger:AirPassengers = JSON.parse(JSON.stringify(this.PassengerActiveCard))//eslint-disable-line
     AtivePassenger.name = this.name
-    console.log(Passengers)
     this.updateActivePassenger(AtivePassenger)
   }
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 <template>
   <div>
     <div class="drawing__title">Цвет пера</div>

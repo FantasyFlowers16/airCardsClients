@@ -9,14 +9,15 @@ const actions: ActionTree<AirInterface, StateInterface> = {
     context.commit('changeAirList', payload)
   },
   updatePassengers (context, payload: Array<AirPassengers>): void {
-    console.log('Passangers Update6666')
+    console.log('Passangers Update6666', payload)
     context.commit('changePassengers', payload)
+  },
+  updatePassengersFull (context, payload: Array<AirPassengers>): void {
+    console.log('Passangers Update6666', payload)
+    context.commit('changePassengersFull', payload)
   },
   updateActivePassenger (context, payload: AirPassengers): void {
     context.commit('changeActivePassenger', payload)
-  },
-  updatePassengersActual (context, payload: Array<AirPassengers>): void {
-    context.commit('changePassengersActual', payload)
   },
   updatePassengerName (context, payload: NameChange): void {
     context.commit('changePassengerName', payload)

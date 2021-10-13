@@ -1,15 +1,11 @@
 import { GetterTree } from 'vuex'
 import { StateInterface } from '../index'
 import { FilterInterface } from './state'
-import { FilteCompanyItem, FilterPoint } from '../../components/models'
+import { FilterPoint } from '../../components/models'
 
 const getters: GetterTree<FilterInterface, StateInterface> = {
   getOpenCloseFilter (context) : boolean {
     return context.openCloseFilter
-  },
-
-  getFilterCompanyItem (context) : Array<FilteCompanyItem> {
-    return context.filterCompanies
   },
 
   getFilteredPoint (context) : FilterPoint {

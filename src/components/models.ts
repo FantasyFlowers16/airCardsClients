@@ -137,10 +137,10 @@ export interface PointWeather {
 }
 
 export interface FilteCompanyItem {
-  id: string;
-  name:string,
-  country:string
-  check: boolean;
+  // id: string;
+  name:Array<string>,
+  country:Array<string>
+  // check: boolean;
 }
 
 export interface FilterPoint {

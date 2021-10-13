@@ -2,7 +2,7 @@
   <div>
     <div class="b-pass__pages">{{ActualPage}} {{titlePage}}</div>
     <div class="b-pass" >
-      <div v-for="item in FilteredActualPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
+      <div v-for="item in FilteredPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
         <air-pass-item :data = "item" />
         <div class="b-pass__item-bg"></div>
       </div>
@@ -44,7 +44,7 @@ class Props {
 })
 
 export default class AirCompanies extends Vue.with(Props) {
-  loader = true
+  loader = false
   openCard = false
   PassengersList: Array<AirPassengers> = []
   CompanyNames:Array<string> = []
@@ -71,9 +71,9 @@ export default class AirCompanies extends Vue.with(Props) {
     return this.$store.getters['filter/getFilteredPoint'] as FilterPoint//eslint-disable-line
   }
 
-  get FilteredActualPassangers () : Array<AirPassengers> {
+  get FilteredPassangers () : Array<AirPassengers> {
     this.loader = true
-    let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.PassengersActual))//eslint-disable-line
+    let ActualPas: Array<AirPassengers> = JSON.parse(JSON.stringify(this.Passengers))//eslint-disable-line
     if (this.FilteredPoint.company !== '' || this.FilteredPoint.country !== '') {
       if (this.FilteredPoint.company !== '') {
         this.loader = true
@@ -96,7 +96,7 @@ export default class AirCompanies extends Vue.with(Props) {
         })
         ActualPas = NewAirPas
         this.loader = false
-        if (!ActualPas.length && this.PassengersActual.length) {
+        if (!ActualPas.length && this.Passengers.length) {
           this.filterText = 'Нет подходящих вариантов для вашего поиска'
         } else {
           this.filterText = ''
@@ -131,10 +131,6 @@ export default class AirCompanies extends Vue.with(Props) {
   //   return this.PassengersList//eslint-disable-line
   // }
 
-  get PassengersActual () : Array<AirPassengers> {
-    return this.$store.getters['air/getPassengersActual'] as Array<AirPassengers>  //eslint-disable-line
-  }
-
   get Passengers () : Array<AirPassengers> {
     return this.$store.getters['air/getPassengers'] as Array<AirPassengers>  //eslint-disable-line
   }
@@ -163,11 +159,11 @@ export default class AirCompanies extends Vue.with(Props) {
     return titlePage
   }
 
-  created () {
-    this.$watch('Passengers', () => {
-      this.CountActualPassangers()
-    })
-  }
+  // created () {
+  //   this.$watch('Passengers', () => {
+  //     this.CountActualPassangers()
+  //   })
+  // }
 
   mounted () {
     console.log('start')
@@ -182,10 +178,6 @@ export default class AirCompanies extends Vue.with(Props) {
     this.$store.dispatch('air/updatePassengersDeleteId',val) //eslint-disable-line
   }
 
-  updatePassengersActual (val: Array<AirPassengers>) {
-    this.$store.dispatch('air/updatePassengersActual',val) //eslint-disable-line
-  }
-
   updateActivePassenger (val: AirPassengers) {
     this.$store.dispatch('air/updateActivePassenger',val) //eslint-disable-line
   }
@@ -198,23 +190,23 @@ export default class AirCompanies extends Vue.with(Props) {
     this.$store.dispatch('air/updateOpenCloseCard',val) //eslint-disable-line
   }
 
-  CountActualPassangers () {
-    if (this.Passengers) {
-      this.Passengers.forEach(el => {
-        this.PassengersList.push(el)//eslint-disable-line
-      })
-      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-      this.updatePassengersActual(actualPas)
-    } else {
-      this.loader = true
-    }
-    if (this.PassengersDeleteId) {
-      this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
-      const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-      this.updatePassengersActual(actualPas)
-      this.updatePassengersDeleteId(null)
-    }
-  }
+  // CountActualPassangers () {
+  //   if (this.Passengers) {
+  //     this.Passengers.forEach(el => {
+  //       this.PassengersList.push(el)//eslint-disable-line
+  //     })
+  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+  //     this.updatePassengersActual(actualPas)
+  //   } else {
+  //     this.loader = true
+  //   }
+  //   if (this.PassengersDeleteId) {
+  //     this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
+  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
+  //     this.updatePassengersActual(actualPas)
+  //     this.updatePassengersDeleteId(null)
+  //   }
+  // }
 
   async loockScroll () {
     // const el = document.querySelector("#companies-container")

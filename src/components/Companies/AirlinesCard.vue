@@ -64,25 +64,12 @@ export default class AirlinesCard extends Vue.with(Props) {
         CorrectCompany.push(el)
       }
     })
-    // CorrectCompany.sort(function (a, b) {
-    //   const nameA = a.name.toLowerCase()
-    //   const nameB = b.name.toLowerCase()
-    //   if (nameA < nameB) {
-    //     return -1
-    //   } else if (nameA > nameB) {
-    //     return 1
-    //   } else return 0 // Никакой сортировки
-    // })
     return CorrectCompany
   }
 
   get OpenCloseCompanies () : boolean {
     return this.$store.getters['air/getOpenCloseCompanies'] as boolean //eslint-disable-line
   }
-
-  // get CurrentImgDaily ():string {
-  //   return 'http://openweathermap.org/img/wn/' + this.DataWeather.daily[0].weather[0].icon + '@2x.png'//eslint-disable-line
-  // }
 
   updateOpCloseCompanies (val: boolean) {
     this.$store.dispatch('air/updateOpenCloseCompanies',val) //eslint-disable-line
@@ -94,7 +81,6 @@ export default class AirlinesCard extends Vue.with(Props) {
 
   async mounted () {
     await this.updateAirlinesAxios()
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   }
 
   addCompany () {

@@ -7,6 +7,13 @@ const mutation: MutationTree<AirInterface> = {
     state.airConpanyList = payload
   },
   changePassengers (state: AirInterface, payload: Array<AirPassengers>):void {
+    console.log('mutetions payload', payload)
+    payload.forEach(el => {
+      state.passengers.push(el)
+    })
+    // state.passengers.push(payload)
+  },
+  changePassengersFull (state: AirInterface, payload: Array<AirPassengers>):void {
     state.passengers = payload
   },
   changeActivePassenger (state: AirInterface, payload: AirPassengers):void {
@@ -17,9 +24,6 @@ const mutation: MutationTree<AirInterface> = {
   },
   changesuccsesseName  (state: AirInterface, payload: boolean):void {
     state.succsessChangeName = payload
-  },
-  changePassengersActual (state: AirInterface, payload: Array<AirPassengers>):void {
-    state.passengersActual = payload
   },
   changePassengersDeleteId (state: AirInterface, payload: string | null) :void {
     state.passengersDeleteId = payload
