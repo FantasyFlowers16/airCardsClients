@@ -20,6 +20,7 @@ export interface AirCompanyList {
 export interface AirPassengers {
   _id:string,
   name:string,
+  trips:number,
   airline:Array<AirCompanyList>
 }
 export interface PasDelete {

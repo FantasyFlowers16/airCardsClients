@@ -7,13 +7,21 @@
             <div class="b-pass-card__info-block" >
               <div class="b-pass-card__title">Имя пассажира: </div>
               <div class="b-pass-card__text"  :class="{_load:loader}">{{data.name}}</div>
-              <div class="b-pass-card__redact-name" v-if="!redactForm" @click="redactName"></div>
+              <div class="b-pass-card__redact-name" v-if="!changeName" @click="redactName"></div>
               <div class="b-pass-card__succsess-name" v-if="ChangeName" @click="redactName"></div>
             </div>
-            <div class="b-pass__info-block" v-if="redactForm && !ChangeName">
+            <div class="b-pass__info-block" v-if="changeName && !ChangeName">
               <q-input class="b-pass-card__input input" color="black" v-model="name" />
               <q-btn class="but b-pass-card__but " @click="changePasName">Изменить</q-btn>
-             </div>
+            </div>
+            <div class="b-pass-card__info-block" >
+              <div class="b-pass-card__title">Поездки: </div>
+              <div class="b-pass-card__text"  :class="{_load:loader}">{{data.trips}}</div>
+            </div>
+            <!-- <div class="b-pass__info-block" v-if="changeTrips && !ChangeName">
+              <q-input class="b-pass-card__input input" color="black" v-model="tripsCount" />
+              <q-btn class="but b-pass-card__but " @click="changePasName">Изменить</q-btn>
+             </div> -->
             <div class="b-pass__info-block">
               <div class="b-pass-card__title">Название компании: </div>
               <div class="b-pass-card__text" :class="{_load:loader}">{{data.airline[0].name}}</div>
@@ -63,7 +71,9 @@ export default class CompanyCard extends Vue.with(Props) {
   clickCount = 0;
   loader = true
   name = this.data.name
-  redactForm = false
+  tripsCount = this.data.trips
+  changeName = false
+  changeTrips = false
 
   get Passengers () : Array<AirPassengers> {
     return this.$store.getters['air/getPassengers'] as Array<AirPassengers>  //eslint-disable-line
@@ -120,8 +130,12 @@ export default class CompanyCard extends Vue.with(Props) {
     }, 1100)
   }
 
+  redactTrips () {
+    this.changeTrips = true
+  }
+
   redactName () {
-    this.redactForm = true
+    this.changeName = true
   }
 
   async deletePas () {
@@ -179,8 +193,6 @@ export default class CompanyCard extends Vue.with(Props) {
   position: relative;
   // overflow-y: auto;
   // overflow-x: hidden;
-  &__input{
-  }
   &__but{
     margin: 0 20px
   }

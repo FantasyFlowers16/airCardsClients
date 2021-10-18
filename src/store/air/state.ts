@@ -32,6 +32,7 @@ function state (): AirInterface {
     passengerActiveCard: {
       _id: '',
       name: '',
+      trips: 0,
       airline: []
     },
     passengers: [],

@@ -1,7 +1,7 @@
 <template>
   <div  class="b-airlines-backdrop"  :class="{_open:OpenCloseCompanies}">
     <div  class="b-airlines-card">
-      <div class="title b-airlines-card__title">  Авиакомпании</div>
+      <div class="title b-airlines-card__title">Авиакомпании</div>
       <div class="b-airlines__container-item" :class="{_full:ActiveListCompany.length<2 }">
         <div class="b-airlines__close-company-card" v-if="ActiveListCompany.length<2"  @click="closeBlock"></div>
         <div v-for="item in ActiveListCompany" :key="item.name" :class="{_openCard: openCard}" class="b-airlines__item"  @click="openBlock(item.id)">
@@ -11,9 +11,9 @@
       <div class="b-airlines__but-container">
         <q-btn v-if="ActiveListCompany.length>1" class="but" color="black" @click="addCompany">Eще</q-btn>
       </div>
+      <loader v-if="loader" class="b-airlines__load"></loader>
     </div>
     <div class="array"  @click="closeCompanies"></div>
-    <loader v-if="loader"></loader>
  </div>
 </template>
 
@@ -80,7 +80,9 @@ export default class AirlinesCard extends Vue.with(Props) {
   }
 
   async mounted () {
+    this.loader = true
     await this.updateAirlinesAxios()
+    this.loader = false
   }
 
   addCompany () {
@@ -156,6 +158,11 @@ export default class AirlinesCard extends Vue.with(Props) {
         }
       }
     }
+  }
+  &__load{
+    background-color: transparent!important;
+    position: absolute;
+
   }
   &__close-company-card{
     background-image: url('assets/icons/resize.svg');

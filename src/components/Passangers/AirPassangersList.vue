@@ -2,10 +2,10 @@
   <div>
     <div class="b-pass__pages">{{ActualPage}} {{titlePage}}</div>
     <div class="b-pass" >
-      <div v-for="item in FilteredPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
-        <air-pass-item :data = "item" />
-        <div class="b-pass__item-bg"></div>
-      </div>
+        <div v-for="item in FilteredPassangers" :key="item._id"  class="b-pass__item-card" @click="openItem(item)">
+          <air-pass-item :data = "item" />
+          <div class="b-pass__item-bg"></div>
+        </div>
     </div>
     <div v-if="filterText" class="b-pass__filter-text">{{filterText}}</div>
     <loader v-if="loader" class="b-pass__load"></loader>
@@ -34,13 +34,6 @@ class Props {
 
 @Options({
   components: { AirPassItem, AirPassCard, Loader, PopupCard }
-  // watch: {
-  //   Passengers: value => {
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  //     this.CountActualPassangers()
-  //     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  //   }
-  // }
 })
 
 export default class AirCompanies extends Vue.with(Props) {
@@ -107,29 +100,7 @@ export default class AirCompanies extends Vue.with(Props) {
       this.loader = false
       return ActualPas
     }
-    // console.log('ActualPas2', ActualPas)
-    // return ActualPas
   }
-
-  // get CountActualPassangers () : Array<AirPassengers> {
-  //   console.log('Passengers2', this.Passengers)
-  //   if (this.Passengers) {
-  //     this.Passengers.forEach(el => {
-  //       this.PassengersList.push(el)//eslint-disable-line
-  //     })
-  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-  //     this.updatePassengersActual(actualPas)
-  //   } else {
-  //     this.loader = true
-  //   }
-  //   if (this.PassengersDeleteId) {
-  //     this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
-  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-  //     this.updatePassengersActual(actualPas)
-  //     this.updatePassengersDeleteId(null)
-  //   }
-  //   return this.PassengersList//eslint-disable-line
-  // }
 
   get Passengers () : Array<AirPassengers> {
     return this.$store.getters['air/getPassengers'] as Array<AirPassengers>  //eslint-disable-line
@@ -190,24 +161,6 @@ export default class AirCompanies extends Vue.with(Props) {
     this.$store.dispatch('air/updateOpenCloseCard',val) //eslint-disable-line
   }
 
-  // CountActualPassangers () {
-  //   if (this.Passengers) {
-  //     this.Passengers.forEach(el => {
-  //       this.PassengersList.push(el)//eslint-disable-line
-  //     })
-  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-  //     this.updatePassengersActual(actualPas)
-  //   } else {
-  //     this.loader = true
-  //   }
-  //   if (this.PassengersDeleteId) {
-  //     this.PassengersList = this.PassengersList.filter(el => el._id !== this.PassengersDeleteId)
-  //     const actualPas = JSON.parse(JSON.stringify(this.PassengersList))//eslint-disable-line
-  //     this.updatePassengersActual(actualPas)
-  //     this.updatePassengersDeleteId(null)
-  //   }
-  // }
-
   async loockScroll () {
     // const el = document.querySelector("#companies-container")
     if (document.documentElement.scrollHeight - document.documentElement.scrollTop === document.documentElement.clientHeight) {
@@ -234,6 +187,11 @@ export default class AirCompanies extends Vue.with(Props) {
 .showCard-leave-active {
   animation: showCard 0.9s reverse;
 }
+
+.flip-list-move {
+  transition: transform 0.8s ease;
+}
+
 @keyframes showCard {
   0% {
     opacity: 0;
